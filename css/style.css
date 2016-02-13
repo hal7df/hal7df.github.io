@@ -40,43 +40,17 @@ img.center {
 	margin: 0 auto;
 }
 
-/** SELECTOR **/
-@media all and (min-width: 821px) {
-	ul.select {
-		margin: 50px auto;
-		padding: 0;
-		text-align: center;
-	}
-	
-	ul.select > li {
-		display: inline-block;
-		padding: 0;
-		margin: 10px;
-		position: relative;
-	}
-	
-	ul.select > li span.displayFeature {
-		display: none;
-		color: #ffffff;
-		background-color: rgba(0,0,0,0.6);
-		border-radius: 10px; 
-		position: absolute;
-		left: 0;
-		right: 0;
-		bottom: 180px;
-		margin-top: 10px;
-		margin-left: auto;
-		margin-right: auto;
-		font-size: 1.25em;
-		padding: 5px;
-	}
-	
-	ul.select > li:hover span.displayFeature {
-		display: block;
-	}
-	
+@media all and (min-width: 821px) {	
 	.feature img {
-		width: 175px;
+		width: 175px !important;
+	}
+	
+	img.profile {
+		-webkit-clip-path: circle(50px at center);
+		-moz-clip-path: circle(50px at center);
+		-ms-clip-path: circle(50px at center);
+		-o-clip-path: circle(50px at center);
+		clip-path: circle(50px at center);
 	}
 	
 	div.bottom {
@@ -91,6 +65,82 @@ img.center {
 		background: -o-linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.5) 100%);
 		background: linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.5) 100%);
 	}
+	
+	div#friends {
+		float: left;
+	}
+	
+	#friendTitle {
+		text-align: left;
+		margin-left: 20px;
+	}
+
+	/** SELECTOR **/
+	ul.select {
+		margin: 50px auto;
+		padding: 0;
+		text-align: center;
+	}
+	
+	ul.select > li {
+		display: inline-block;
+		padding: 0;
+		margin: 10px;
+		position: relative;
+		text-align: center;
+	}
+	
+	li.divider {
+		width: 2px;
+		height: 75px;
+		content: '';
+		background-color: rgba(200,200,200,0.8);
+	}
+	
+	ul.select a {
+		display: block;
+		margin: 0 auto;
+	}
+	
+	ul.select img {
+		width: 100px;
+	}
+	
+	ul.select > li span.displayWrap {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+		left: 0px;
+		bottom: 120px;
+	}
+	
+	ul.select.feature > li span.displayWrap {
+		left: 0;
+		bottom: 180px;
+	}
+	
+	ul.select > li span.displayFeature {
+		display: none;
+		color: #ffffff;
+		background-color: rgba(0,0,0,0.6);
+		border-radius: 10px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 5px;
+		font-size: 0.85em;
+		text-overflow: ellipsis;
+	}
+	
+	ul.select.feature > li span.displayFeature {
+		left: 0;
+		right: 0;
+		bottom: 180px;
+		font-size: 1.25em;
+	}
+	
+	ul.select > li:hover span.displayFeature {
+		display: block;
+	}
 }
 
 @media only screen and (max-width: 768px) {
@@ -104,6 +154,14 @@ img.center {
 	
 	a:hover {
 		text-decoration: none;
+	}
+	
+	img.profile {
+		-webkit-clip-path: circle(20px at center);
+		-moz-clip-path: circle(20px at center);
+		-ms-clip-path: circle(20px at center);
+		-o-clip-path: circle(20px at center);
+		clip-path: circle(20px at center);
 	}
 	
 	ul.select {
@@ -127,12 +185,16 @@ img.center {
 		margin: 0;
 	}
 	
+	ul.select > li.divider {
+		height: 0.1em;
+	}
+	
 	ul.select img {
 		position: relative;
 		top: 5px;
 		left: 5px;
 		width: 40px;
-		style: inline;
+		display: inline-block;
 	}
 	
 	ul.select > li a {

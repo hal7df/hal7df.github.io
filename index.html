@@ -4,18 +4,53 @@
 		<title>hal7df &#8212; Paul Bunyan</title>
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="css/style.css"/>
+		<script type="text/javascript">
+			function randLang()
+			{
+				friendTitle = document.getElementById("friendTitle");
+				
+				var randNum = Math.floor(Math.random() * 3);
+				
+				switch (randNum)
+				{
+				case 0:
+					friendTitle.innerHTML = "Friends are good";
+					break;
+				case 1:
+					friendTitle.innerHTML = "Mes amis";
+					break;
+				case 2:
+					friendTitle.innerHTML = "Los amigos";
+					break;
+				}
+			}
+		</script>
 	</head>
-	<body>
+	<body onload="randLang()">
 		<h1 class="title">paul bunyan</h1>
 		<img class="center mainimg" src="https://avatars2.githubusercontent.com/u/4631197" alt="Bunyan's code"/>
 		<h2>The most paulpular guy around.</h2>
 		
 		<ul class="select feature">
-			<li><a href="http://hal7df.github.io/pauls-tutorials/"><img alt="Paul's Tutorials" src="img/PaulsTutorials.png"/><span class="displayFeature">Paul's Tutorials</span></a></li>
-			<li><a href="http://github.com/hal7df/2048-qt"><img alt="2Q48" src="img/2Q48.png"/><span class="displayFeature">2Q48</span></a></li>
-			<li><a href="http://github.com/hal7df/qrossnotes"><img alt="QrossNotes" src="img/qrossnotes.png"/><span class="displayFeature">QrossNotes</span></a></li>
-			<li><a href="http://github.com/hal7df"><img alt="GitHub" src="img/github.png"/><span class="displayFeature">More on GitHub</span></a></li>
+			<li><a href="http://hal7df.github.io/pauls-tutorials/"><img alt="Paul's Tutorials" src="img/PaulsTutorials.png"/><span class="displayWrap"><span class="displayFeature">Paul's Tutorials</span></span></a></li>
+			<li><a href="http://github.com/hal7df/2048-qt"><img alt="2Q48" src="img/2Q48.png"/><span class="displayWrap"><span class="displayFeature">2Q48</span></span></a></li>
+			<li><a href="http://github.com/hal7df/qrossnotes"><img alt="QrossNotes" src="img/qrossnotes.png"/><span class="displayWrap"><span class="displayFeature">QrossNotes</span></span></a></li>
+			<li><a href="http://github.com/hal7df"><img alt="GitHub" src="img/github.png"/><span class="displayWrap"><span class="displayFeature">More on GitHub</span></span></a></li>
 		</ul>
+		
+		<div id="friends">
+		<h3 id="friendTitle"></h3>
+		<ul class="select">
+			<li><a href="http://github.com/libascension"><img class="profile" alt="LibAscension" src="https://avatars2.githubusercontent.com/u/13804974"><span class="displayWrap"><span class="displayFeature">LibAscension</span></span></a></li>
+			<li><a href="http://github.com/pcbonnen"><img class="profile" alt="pcbonnen" src="https://avatars1.githubusercontent.com/u/14983941"><span class="displayWrap"><span class="displayFeature">pcbonnen</span></span></a></li>
+			<li class="divider"></li>
+			<li><a href="http://github.com/chimpfun10"><img class="profile" alt="chimpfun10" src="https://avatars0.githubusercontent.com/u/6342370"><span class="displayWrap"><span class="displayFeature">chimpfun10</span></span></a></li>
+			<li><a href="http://github.com/lopezayl"><img class="profile" alt="lopezayl" src="https://avatars0.githubusercontent.com/u/15708289"/><span class="displayWrap"><span class="displayFeature">lopezayl</span></span></a></li>
+			<li><a href="http://github.com/marlinabowring"><img class="profile" alt="marlinabowring" src="https://avatars1.githubusercontent.com/u/10442386"><span class="displayWrap"><span class="displayFeature">marlinabowring</span></span></a></li>
+			<li><a href="http://github.com/Brandon1233"><img class="profile" alt="Brandon1233" src="https://avatars0.githubusercontent.com/u/10456198"><span class="displayWrap"><span class="displayFeature">Brandon1233</span></span></a></li>
+			<li><a href="http://github.com/chad414"><img class="profile" alt="chad414" src="https://avatars2.githubusercontent.com/u/8977932"><span class="displayWrap"><span class="displayFeature">chad414</span></span></a></li>
+		</ul>
+		</div>
 		
 		<div class="bottom">Background: "<a href="https://commons.wikimedia.org/wiki/File:Paul_Bunyon_statue_in_Bangor,_Maine.jpg#/media/File:Paul_Bunyon_statue_in_Bangor,_Maine.jpg">Paul Bunyon statue in Bangor, Maine</a>" by Dennis Jarvis -
 			<a rel="nofollow" class="external free" href="http://www.flickr.com/photos/archer10/4447762402/sizes/o/in/photostream/">http://www.flickr.com/photos/archer10/4447762402/sizes/o/in/photostream/</a>. Licensed under <a href="http://creativecommons.org/licenses/by-sa/2.0" title="Creative Commons Attribution-Share Alike 2.0">CC BY-SA 2.0</a> via <a href="https://commons.wikimedia.org/wiki/">Commons</a>.</div>
