@@ -68,6 +68,18 @@ img.center {
 	
 	div#friends {
 		float: left;
+		width: 50%;
+	}
+	
+	div#resume {
+		float: right;
+		width: 50%;
+	}
+	
+	div#resume > ul.select {
+		text-align: right !important;
+		margin-top: 9.5%;
+		margin-bottom: 0;
 	}
 	
 	#friendTitle {
