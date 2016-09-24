@@ -46,11 +46,10 @@ img.center {
 	}
 	
 	img.profile {
-		-webkit-clip-path: circle(50px at center);
-		-moz-clip-path: circle(50px at center);
-		-ms-clip-path: circle(50px at center);
-		-o-clip-path: circle(50px at center);
-		clip-path: circle(50px at center);
+		-webkit-border-radius: 50px;
+		-moz-border-radius: 50px;
+		-ms-border-radius: 50px;
+		border-radius: 50px;
 	}
 	
 	div.bottom {
