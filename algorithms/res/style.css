@@ -1,0 +1,31 @@
+body {
+	background-color: #f5f5f5;
+}
+
+h1,h2,h3,h4,h5 {
+	text-align: center;
+}
+
+#info,
+#resources,
+#schedule {
+	margin: 5px auto;
+	width: 90%;
+}
+#info .mdl-card__supporting-text,
+#resources .mdl-card__supporting-text {
+	padding-left: 30px;
+}
+#schedule td:not(:first-of-type),
+#schedule th:not(:first-of-type) {
+	padding-left: 24px;
+}
+.mdl-layout__header-row.mdl-layout__tab-bar {
+	height: 48px;
+}
+.mdl-layout.is-upgraded .mdl-layout__tab.is-active::after {
+	background: #ffffff;
+}
+.material-icons {
+	width: 100%;
+}
