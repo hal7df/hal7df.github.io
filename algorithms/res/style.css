@@ -11,11 +11,6 @@ h1,h2,h3,h4,h5 {
 	width: 90%;
 }
 
-#info .mdl-card__supporting-text,
-#resources .mdl-card__supporting-text {
-	padding-left: 30px;
-}
-
 #schedule td:not(:first-of-type),
 #schedule th:not(:first-of-type) {
 	padding-left: 24px;
@@ -42,6 +37,8 @@ h1,h2,h3,h4,h5 {
 	background: #ffffff;
 }
 
-.material-icons {
-	width: 100%;
+/*
+.mdl-layout__tab-bar-left-button {
+	overflow: hidden;
 }
+*/
