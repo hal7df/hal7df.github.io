@@ -6,6 +6,10 @@ h1,h2,h3,h4,h5 {
 	text-align: center;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 .content-card {
 	margin: 5px auto;
 	width: 90%;

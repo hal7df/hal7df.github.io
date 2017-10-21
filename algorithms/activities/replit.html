@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>repl.it setup &#8212; IA Algorithms Enrichment 2017</title>
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              Activities &gt; Oct 21 &gt; repl.it setup
+            </div>
+            <p style="margin-top: 1.5em;">In this enrichment, you will learn how to apply logical thought processes to design algorithms and write computer programs.
+            	The best way to learn these skills is to apply them as you learn them, so it is very critical that you have an environment in which to program.
+            	 For this enrichment, we will be using the online service repl.it to edit, run, and test your programs.</p>
+            <h3>Creating an account</h3>
+              <p>Accounts are free. Go to <a href="https://repl.it/signup" target="_blank">https://repl.it/signup</a> and click on the Google icon:</p>
+              <img src="img/replit-signup.png" alt="Sign up page for repl.it"/>
+              <p>On the next page, choose your <span class="bold">bloomfield.org</span> school email address, or click "Use another account" if it is not in the list, and log in.
+				 On the next page, grant repl.it access to the permissions it has requested. This should redirect you back to repl.it, with your fancy new dashboard.</p>
+            <h3>Joining the class</h3>
+              <p>I will write the invite URL on the board during class today (I will not be posting the URL here due to security concerns --
+				 if you missed the first class, please send me an email at <a href="mailto:pcbonnen@umich.edu">pcbonnen@umich.edu</a> and I will send you an invite).
+				 Please type that URL into the browser and accept the invite. This is the repl.it classroom; the end-of-class exercises will be posted here for you to complete.</p>
+            <h3>Opening a new REPL</h3>
+              <p>Whenever a new concept is taught, you will first experiment with the related code in a coding walkthrough (which will be posted under Activities on the enrichment website).
+              	 As I will not be collecting these, there will be no assignments posted in the repl.it classroom. In order to do these assignments, click on the "my repls" tab at the top (if not already selected):</p>
+           	  <img src="img/replit-repl-tab.png" alt="Tab for personal repls"/>
+           	  <p>At first, you will have no REPLs saved, so you will have to create a new one. Click on the "Start Coding Now" button:</p>
+           	  <img src="img/replit-create-first-repl.png" alt="Start Coding"/>
+           	  <p>On the following page, search for <span class="bold">C++11</span>, and click on it to open a new REPL. <span class="bold">Note:</span> Do <span class="underline">NOT</span> choose "C++".
+				This will give you a REPL running on an older version of the C++ specification, and as a result some of the constructs you will learn in this class will not work.</p>
+			  <img src="img/replit-lang-select.png" alt="Language selection"/>
+			  <p>Now, you will be presented with the REPL: A split screen with your code on the left and the output on the right. Be sure to name your REPL and save often! You can click "Run" to run your code.</p>
+			  <img src="img/replit-repl.png" alt="REPL interface"/>
+			  <p>Your assignments will also have the same generic interface.</p>
+			  <p>Although I will not be collecting the code you write in these REPLs, I <span class="italic">highly</span> recommend that you create a <span class="underline">separate</span> REPL for each code walkthrough.
+			  	 If you don't, not only will all of the code for all of your activities be running one after the other when you click "run" (which may take some time!), but it will inevitably lead to messy code,
+			  	 which is <span class="underline">bad</span>.</p>
+			  <p>To create a new REPL, return to the "my repls" tab. Your first REPL should now appear in the list (you can click on it to re-open it). Click on the "New REPL" button at the top,
+				 and follow the same language instructions as above.</p>
+			 <h3>What's a REPL?</h3>
+			  <p>You've seen this acronym being thrown around all over this page and over repl.it (even the URL has it!). Curious minds might be asking: what does REPL stand for?</p>
+			  <p>REPL stands for <span class="bold">R</span>ead, <span class="bold">E</span>valuate, <span class="bold">P</span>rint, <span class="bold">L</span>oop.
+				 The term doesn't apply as well to C++ as it does for other languages, but if the language is interpreted (i.e. an <span class="italic">interpreter</span> reads your source code and executes it directly, line-by-line)
+				 you can create an interactive prompt where you can enter individual, arbitrary language expressions, and the interpreter will evaluate those expressions, print the result, and then prompt you again
+				 (until you ask the interpreter to quit).</p>
+			  <p>C++ is a compiled language, which means a program called the <span class="italic">compiler</span> reads the <span class="underline">entirety</span> of your source code and converts it into machine code
+			  	 (a *.exe file on Windows) that the computer can more readily understand. Because C++ was not designed to be executed on a source line-by-line basis, the concept of a REPL actually doesn't really apply here.
+				 (This service just extended its product to support compiled languages.)</p>   
+          </div>
+        </div>
+       </main>
+      </div>
+</body>
+</html>

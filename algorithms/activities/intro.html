@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Introduction to C++ &#8212; IA Algorithms Enrichment 2017</title>
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              Activities &gt; Oct 21 &gt; Introduction to C++
+            </div>
+            <h2>Introduction to C++</h2>
+            <p style="margin-top: 1.5em;">In this language, you will be learning the C++ programming language.
+				C++ is a popular, fast, object-oriented programming language created by Bjarne Stroustrup in 1983 as an extension to the C parogramming language.
+				C++ can be extended by a large number of community- and business-provided software libraries, and is quite versatile.
+				This enrichment will not teach you how to use any of these libraries, rather, it will give you the base skills you need to understand C++ code and C++'s standard library.
+				Hopefully, this enrichment will teach you all of the tools you need to learn new programming languages and/or use more advanced libraries that work with C++.</p>
+            <h3 id="hello-world">Your First Program</h3>
+	            <p>Without further ado, here is your first C++ program!</p>
+	            <pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	cout &lt;&lt; "Hello, world!" &lt;&lt; endl;
+	return 0;
+}</pre>
+				<p>OK, let's break it apart, line by line:</p>
+				<pre class="brush: cpp">#include &lt;iostream&gt;</pre>
+				<p>This line is asking the compiler to "include" the <code>iostream</code> header file in your source file.
+					Header files contain definitions for a number of already-implemented functions and/or objects that you will find useful.
+					The contents of a header file are always related. For example, <code>iostream</code> contains definitions for stream objects that allow you to print
+					text to the console and read user input.</p>
+				<p>What the <code>#include</code> operation essentially does is paste the entire contents of the specified header file into your source file before compilation
+					(NEVER do this manually. ALWAYS <code>#include</code>), which allows you to use all of the functionality provided by that header file in your source code. How handy!</p>
+				<p>This line is a bit different from most of the commands you will use in C++. You will notice that it begins with a pound sign -- that means it is a
+					<span class="italic">preprocessor instruction</span>, or an instruction to the part of the compiler that runs before it actually starts analyzing your code. As such, it does
+					not need a trailing semicolon (as described in the next line's explanation).</p>
+				
+				<pre class="brush: cpp; first-line: 2">using namespace std;</pre>
+				<p>This is an instruction telling the compiler that you will be using a lot of functions and/or objects from the <code>std</code> namespace.
+					Everything in the C++ standard library is written into the <code>std</code> namespace, so this saves you the trouble of having to explicitly state
+					the <code>std</code> namespace every time you want to use something from the standard library.</p>
+				<p>Note that this line ends in a semicolon. Almost all statements in C++ end in semicolons -- the semicolon is kind of like the "end of sentence" character, telling the computer
+					that the current statement has finished. <span class="bold">If you forget a semicolon where it is needed, the compiler will throw an error!</span>
+					Always make sure that you are ending your statements with semicolons. (The <code>#include</code> line does not need a semicolon, because it is an instruction to the )</p> 
+					
+				<pre class="brush: cpp; first-line: 4">int main() {</pre>
+				<p>This defines a <span class="function">function</span> called <code>main</code> that takes no arguments.
+					You will learn more about functions later in the enrichment, but for now, think of this as the "signpost" to the computer that says
+					"Hey! My code starts here." The opening curly brace defines the start of the function body,
+					which are a series of statements that will be executed when <code>main</code> is executed. 
+					Since this is defining the structure of your program, this line does <span class="italic">not</span> need a semicolon at the end.</p>
+				
+				<pre class="brush: cpp; first-line: 5">cout &lt;&lt; "Hello, world!" &lt;&lt; endl;</pre>
+				<p>This line tells the computer to print the text "Hello, world!" (without the double quotes) to the screen, and then begin a new line (<code>endl</code>).
+					More specifically, <code>cout</code> is a <span class="italic">stream object</span> that sends any values input into the stream to the screen.
+					Conceptually, you can think of it as a river that flows in the direction of the screen. You can place a number of things in the river (text, numbers, etc.),
+					they will all eventually reach the screen.</p>
+				<p>You can chain the stream insertion operator (<code>&lt;&lt;</code>) to put more things in the stream; for example you could also write:
+				<pre class="brush: cpp; first-line: 5">cout &lt;&lt; "Hello," &lt;&lt; "world!" &lt;&lt; endl;</pre>
+				<p>which would produce the same exact output, except the text "Hello," and "world!" are passed separately to the stream instead of as one value. This will come in handy
+					later when you start to use variables.</p>
+				<p><code>cout</code> and <code>endl</code> are objects provided in the standard library, so theyt belongs to the <code>std</code> namespace.
+					If we had forgotten our <code>using namespace std;</code> instruction at the beginning, the compiler would not know to look in the <code>std</code> namespace, so it
+					would error out, complaining that it couldn't find <code>cout</code> or <code>endl</code>. As mentioned before, you can get around this by explicitly stating that
+					these objects come from the <code>std</code> namespace:</p>
+				<pre class="brush: cpp; first-line: 5">std::cout &lt;&lt; "Hello, world!" &lt;&lt; std::endl;</pre>
+				
+				<p>Moving on:</p>
+				<pre class="brush: cpp; first-line: 6">return 0;</pre>
+				<p>This is the function's <span class="italic">return statement</span>, which essentially tells the computer to stop executing the <code>main</code> function.
+					We will get into more detail about what the return statement actually does when we learn about functions. For right now, think of this line as the program
+					telling the computer "I'm done now, and I didn't have any errors while I was running." When this line executes, the computer's operating system will terminate
+					the process and clean up any memory it was using.</p>
+				<p>Technically, this is required in every C++ program. Some compilers will let you get away without having this line at the end of your <code>main</code> function,
+					however, it is generally considered bad practice. Make sure that you are always including this line at the end of your program.</p>
+				
+				<pre class="brush: cpp; first-line: 7">}</pre>
+				<p>Finally, we have the closing brace for <code>main</code>'s function body. This tells the compiler that <code>main</code> does not have any more code after this point.
+					It may be hard to see why this is necessary at this point, but when we discuss functions in more detail, the reason for this should become clearer.</p>
+					
+				<p>And that's it! This program, when executed, will simply print the text "<a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program" target="_blank">Hello, world!</a>" to the screen and quit.
+					Before we proceed to the guided exercise for this section, let's add one more thing:</p>
+				<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+/* My very first C++ program!
+   Written by me, Paul.
+   I can write comments on multiple lines */
+
+//Single-line comment
+int main () {
+	cout &lt;&lt; "Hello, world!" &lt;&lt; endl; //prints "Hello, world!"
+	return 0;
+}</pre>
+				<p>What you see above are <span class="italic">comments</span>. When the compiler sees these, it will ignore everything in the comment and continue parsing your code after the end of the comment.
+					Comments are a very useful tools for programmers to communicate what their code does, or take notes on particular parts of the code <span class="bold">directly in the source</span>.
+					Comments are also commonly used to render sections of code inert without removing them from the source code. I highly recommend that you use comments to keep track of your own understanding
+					of the source code, or to temporarily disable parts of your code.</p>
+				<p>Shown above are a multi-line comment (<code>/* comment here */</code>) and two single-line comments (<code>//comment here</code>). A multi-line comment can break onto multiple lines,
+					as long as it begins with a <code>/*</code> and ends with a <code>*/</code>. A single-line comment will comment out everything from the comment mark (<code>//</code>) until the end of the line;
+					the compiler will begin parsing code on the following line (unless that line starts with a comment itself).</p>
+				<p>Now, let's try changing some more things with this code.</p>
+					
+				<h4 id="hello-world-exercise">Guided exercise</h4>
+				<p>Create a new C++11 REPL in repl.it, and copy the Hello World program from above into your REPL (be sure not to copy the line numbers).
+					Before you do anything, just run the program to see it in action. Then, modify the program to do the following:</p>
+				<ul>
+					<li>Print the text "<samp>Guten tag!</samp>" instead of "<samp>Hello, world!</samp>"</li>
+					<li>Print the text "<samp>I am a jelly doughnut</samp>" five times, each on its own line.</li>
+					<li>Print the number <samp>42</samp> to the screen. Remove the double quotes around the 42. Why does this still work?</li>
+					<li>Remove the <code>using namespace std;</code> line from the code and modify the calls to <code>cout</code> and <code>endl</code> so that it compiles and runs.
+						Do you notice any change in functionality?</li>
+					<li>Add a single-line comment and a multi-line comment to your code.</li>
+				</ul>
+				<h3 id="variables">Variables</h3>
+				<p>So, this is cool! However, all it does is print text to the screen; we have to modify the source and recompile it every time we want to change what it says. That's really inconvenient! Enter variables.</p>
+				<p>A variable is not too different from a variable that you might use in algebra. It is some value to which you give an arbitrary name.
+					However, variable names in C++ (and any programming language, for that matter) do not need to be single letters;
+					in C++ they can be of any length and contain numbers, letters, or underscores (_); however, the first character in a variable name must not be a number.</p>
+				<p>Let's add a variable to our Hello, World program:</p>
+				<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int foo = 42;
+	cout &lt;&lt; "Hello, world!" &lt;&lt; endl;
+	return 0;
+}</pre>
+				<p>What we just added is called a <span class="italic">variable declaration</span>. It tells the compiler that we want to make a new variable named <code>foo</code> to use at some point in the future.</p>
+				<p>Let's break this apart: first, we have the keyword <code>int</code>, which specifies the <span class="italic">data type</span> of the variable, or what kind of data the variable will hold.
+					This tells the compiler that we want the data type of this this variable to be an integer, or any non-fractional negative or positive number.
+					(There are limits on the largest/smallest value an <code>int</code> can store, but they are sufficiently large for our purposes). Now, we've given our variable the name <code>foo</code> and
+					assigned it the value <code>42</code>. From this point forward, we can use the name <code>foo</code> to retrieve the value we stored (<code>42</code>). So, we might modify the program as such:</p>
+				<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int foo = 42;
+	cout &lt;&lt; "Hello, world!" &lt;&lt; endl;
+	cout &lt;&lt; "My favorite number is " &lt;&lt; foo &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p>If we run this code, we will now see the following text printed on the screen:</p>
+			<p><samp>Hello, world!<br/>My favorite number is 42</samp></p>
+			<p>Our variables don't just have to be integers; here is a list of some basic variable data types:</p>
+			<dl>
+				<dt><code>int</code></dt>
+				<dd>As we have already seen, this is an integer, or any positive or negative value without a fractional part.</dd>
+				<dt><code>double</code></dt>
+				<dd>This is a positive or negative number, but this can handle any real number (to a degree of precision). The term "double" refers to the amount of storage this data type uses.</dd>
+				<dt><code>bool</code></dt>
+				<dd>This is a single true/false value. You can use the keywords <code>true</code> and <code>false</code> to set its value.</dd>
+				<dt><code>char</code></dt>
+				<dd>This is a single character (like '<code>a</code>' or '<code>$</code>'). You can specify characters in your code by using single quotes (e.g. <code>char c = 'C';</code>).</dd>
+				<dt><code>string</code></dt>
+				<dd>This is an arbitrary sequence of characters (like <code>Hello, world!</code>). You can specify strings in your code by using double quotes (e.g. <code>string str = "Hello, world!";</code>).
+					Note that you <span class="bold">must</span> have <code>#include</code>d either <code>iostream</code> or <code>string</code> for this to be accessible.</dd>
+			</dl>
+			<p>So, we can do the following:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string mystr = "HelloWorld";
+	double pi = 3.14159265358979323846;
+	int foo = 42;
+	bool bar = true;
+	char c = '#';
+	cout &lt;&lt; c &lt;&lt; mystr &lt;&lt; endl;
+	
+	//cout does not put spaces between values, so you have to do it manually
+	cout &lt;&lt; foo &lt;&lt; ' ' &lt;&lt; pi &lt;&lt; endl;
+	
+	/* by default, cout will print a bool as '0' or '1' instead of 'false' or
+	   'true', respectively; boolalpha changes that behavior */ 
+	cout &lt;&lt; boolalpha &lt;&lt; bar &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p>This will produce the following output:</p>
+			<p><samp>#HelloWorld<br/>42 3.14159265358979323846<br/>true</samp></p>
+			<p>You do not need to set variables when you declare them, and you can set them at any point after you declare them.
+				Note that you do not need to specify the data type after you've declared the variable:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string mystr;
+	double pi = 3.14159265358979323846;
+	int foo = 42;
+	bool bar = true;
+	char c = '#';
+	
+	mystr = "ProgrammingIsCool";
+	foo = -7; //this overrides 42. foo now contains -7.
+	
+	cout &lt;&lt; c &lt;&lt; mystr &lt;&lt; endl;
+	
+	//cout does not put spaces between values, so you have to do it manually
+	cout &lt;&lt; foo &lt;&lt; ' ' &lt;&lt; pi &lt;&lt; endl;
+	
+	/* by default, cout will print a bool as '0' or '1' instead of 'false' or
+	   'true', respectively; boolalpha changes that behavior */ 
+	cout &lt;&lt; boolalpha &lt;&lt; bar &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p><samp>#ProgrammingIsCool<br/>-7 3.14159265358979323846<br/>true</samp></p>
+			<p>You can also do math on numeric data types. You can use the following operators:</p>
+			<dl>
+				<dt><code>+</code></dt>
+				<dd>Addition. Example: <code>3 + myInt</code></dd>
+				<dt><code>-</code></dt>
+				<dd>Subtraction. Example: <code>pi - 2.718</code></dd>
+				<dt><code>*</code></dt>
+				<dd>Multiplication. Note that you <span class="underline">need</span> to use this operator when you want to multiply,
+					you cannot just put two variable names next to each other like you would in math.<br/> Example: <code>5 * e</code></dd>
+				<dt><code>/</code></dt>
+				<dd>Division.  Example: <code>bar / 2</code>
+					<br/>Note that, if you give the division operator two integers, it will perform <span class="italic">integer division</span>.
+					This means it will calculate the quotient without the fractional part, which sometimes is sometimes unexpected. If you want to divide two
+					integers and get a double as a result, you will need to express the division as a division of doubles, like <code>5./9.</code>
+					(without the trailing dot on at least one of the numbers, this would result in a 0).</dd>
+				<dt><code>++</code></dt>
+				<dd>Increment, or increase the value by 1. This is a unary operator (only has one argument), and only works on variables.<br/> Example: <code>++foo</code> or <code>foo++</code>
+					<br/>There is a difference between the two above forms, however, for our purposes here they do effectively the same thing. The first form is almost always preferred.</dd>
+				<dt><code>--</code></dt>
+				<dd>Decrement, or decrease the value by 1. This is a unary operator, and only works on varaibles. Example: <code>--foo</code> or <code>foo--</code>.</dd>
+			</dl>
+			<p>There are also <span class="italic">compound assignment operators</span>, which use the current value of the variable as the first operand in the operation and the provided value as the second,
+				and then store the result in the variable:</p>
+			<dl>
+				<dt>+=</dt>
+				<dd>Addition compound assignment. Example: <code>foo += 5</code> computes <code>foo + 5</code> and stores the result in <code>foo</code>.
+				<dt>-=</dt>
+				<dd>Subtraction compound assignment. Example: <code>bar -= 2.718</code> computes <code>bar - 2.718</code> and stores the result in <code>bar</code>.
+				<dt>*=</dt>
+				<dd>Multiplication compound assignment. Example: <code>baz *= 42</code> computes <code>baz * 42</code> and stores the result in <code>baz</code>.
+				<dt>/=</dt>
+				<dd>Division compound assignment. Example: <code>foo2 /= 4.5</code> computes <code>foo2 / 4.5</code> and stores the result in <code>foo2</code>.
+			</dl>
+			<p>You can also use parentheses to define order of operations, just like you would in math. Here is a program using some of the math operators:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	double degF;
+	double degC;
+	
+	degF = 59;
+	--degF;
+	degC = degF - 32;
+	degC *= (5./9.);	//5. and 9. to make sure we get the fraction 5/9, not 0
+	
+	cout &lt;&lt; degF &lt;&lt; "F is " &lt;&lt; degC &lt;&lt; "C.";
+	return 0;
+}</pre>
+			<p><samp>58F is 14.4444C.</samp></p>
+			<p>It is important to note that you cannot mix and match data types. For example, you cannot do the following:</p>
+			<pre class="brush: cpp">int foo = "Hello, world!"</pre>
+			<p>The compiler would throw an error on this, because you are trying to assign string data to an integer; in other words you are violating the data type of <code>foo</code>.</p>
+			<div class="italic">Note: Many of you may try setting variables to incompatible data types and find that the compiler accepts them
+				(for example, <code>int f = 'f';</code> or <code>int e = 2.718</code>). In this case, the compiler is still not letting you violate the type, rather, it is actually
+				converting the type on the right to the type on the left. In the former case, <code>'f'</code> gets converted to its ASCII value, 102, and in the latter case <code>2.718</code>
+				gets truncated -- not rounded -- to 2. The compiler does not allow conversions from a <code>string</code> to an <code>int</code> because there is no such conversion that is sensible.
+				As a general rule of thumb, do not rely on type conversions to exist -- always make sure that you are assigning the appropriate data type to your variables.</div>
+            
+            <h4 id="variables-exercise">Guided exercise</h4>
+            <p>In the same REPL as before, add at least variable of each type listed above and print each of them to the screen. Also, do the following:</p>
+            <ul>
+            	<li>Compute the circumference of a circle with radius 2.718. Make sure the radius is stored in its own varaible. The formula for circumference is c = 2&pi;r. You can copy the declaration for &pi; from above.</li>
+            	<li>Increment an integer.</li>
+            	<li>Decrement a double.</li>
+            	<li>Increment a char. What did this do? (Why?)</li>
+            </ul>
+            <h3 id="Input">Input</h3>
+            <h4 id="input-exercise">Guided exercise</h4>
+            <p>Copy the Hello, World code from before, but make the following changes:</p>
+            <ul>
+            	<li>Before printing the <code>Hello</code> line, ask the user for their name (Note: you will need to print something to the screen to indicate to the user that they need to type something in!)</li>
+            	<li>Instead of printing <code>Hello, world!</code>, print <code>Hello, $user!</code>, where <code>$user</code> is the name that the user just entered (e.g. if the user enters <code>Paul</code>, it would print <code>Hello, Paul!</code>).
+            	<li>After printing <code>Hello, $user!</code>, ask the user for two numbers. After the user has input the two numbers, add them and display the sum on the screen.</li>
+            </ul>
+            <h3 id="if-else">If/Else statements</h3>
+            <h4 id="if-else-exercise">Guided exercise</h4>
+            <p>Using your modified Hello, World program from the Input section, make the following changes:</p>
+            <ul>
+            	<li>Ask the user to choose between English and the language you chose to study at school (if you are studying a language that does not use the Latin alphabet, use the Latin transliteration).
+					Make all output following that prompt in the user's chosen language (you can ignore accents and diacritics. Yes, I know it's incorrect, but just for simplicity's sake).</li>
+				<li>Before asking the user to input the two numbers, ask them if they want to add, subtract, multiply, or divide. Do the operation specified by the user on the two numbers.</li>
+            </ul>
+            <h3 id="loops">Loops</h3>
+            <h4 id="loops-exercise">Guided exercise</h4>
+            <p>Write the following two programs. Be sure to use a loop:</p>
+            <ul>
+            	<li>Ask the user for a number 5 times and output the sum of the 5 numbers.</li>
+            	<li>Ask the user for a number until the user enters a negative number, then output the sum of the numbers (including the negative number).</li>
+            </ul>
+            <p>You're all done for today's walkthrough! Head over to the repl.it classroom and get started on today's exercise.</p>
+          </div> 
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>
