@@ -40,12 +40,22 @@
               Activities &gt; Oct 21 &gt; Introduction to C++
             </div>
             <h2>Introduction to C++</h2>
-            <p style="margin-top: 1.5em;">In this language, you will be learning the C++ programming language.
+            <p style="margin-top: 1.5em;">In this enrichment, you will be learning the C++ programming language.
 				C++ is a popular, fast, object-oriented programming language created by Bjarne Stroustrup in 1983 as an extension to the C parogramming language.
 				C++ can be extended by a large number of community- and business-provided software libraries, and is quite versatile.
 				This enrichment will not teach you how to use any of these libraries, rather, it will give you the base skills you need to understand C++ code and C++'s standard library.
 				Hopefully, this enrichment will teach you all of the tools you need to learn new programming languages and/or use more advanced libraries that work with C++.</p>
-            <h3 id="hello-world">Your First Program</h3>
+			<p>In this page:</p>
+			<ul>
+				<li><a href="#hello-world">Your first program</a></li>
+				<li><a href="#variables">Variables</a></li>
+				<li><a href="#input">Input</a></li>
+				<li><a href="#if-else"><code>if-else</code> statements</a></li>
+				<li><a href="#loops">Loops</a></li>
+				<li><a href="#scoping">Scoping and variable lifetimes</a></li>
+			</ul>
+				
+            <h3 id="hello-world">Your first program</h3>
 	            <p>Without further ado, here is your first C++ program!</p>
 	            <pre class="brush: cpp">
 #include &lt;iostream&gt;
@@ -175,8 +185,7 @@ int main () {
 	cout &lt;&lt; "My favorite number is " &lt;&lt; foo &lt;&lt; endl;
 	return 0;
 }</pre>
-			<p>If we run this code, we will now see the following text printed on the screen:</p>
-			<p><samp>Hello, world!<br/>My favorite number is 42</samp></p>
+			<p class="output">Hello, world!<br/>My favorite number is 42</p>
 			<p>Our variables don't just have to be integers; here is a list of some basic variable data types:</p>
 			<dl>
 				<dt><code>int</code></dt>
@@ -212,8 +221,7 @@ int main () {
 	cout &lt;&lt; boolalpha &lt;&lt; bar &lt;&lt; endl;
 	return 0;
 }</pre>
-			<p>This will produce the following output:</p>
-			<p><samp>#HelloWorld<br/>42 3.14159265358979323846<br/>true</samp></p>
+			<p class="output">#HelloWorld<br/>42 3.14159265358979323846<br/>true</p>
 			<p>You do not need to set variables when you declare them, and you can set them at any point after you declare them.
 				Note that you do not need to specify the data type after you've declared the variable:</p>
 			<pre class="brush: cpp">
@@ -240,7 +248,7 @@ int main () {
 	cout &lt;&lt; boolalpha &lt;&lt; bar &lt;&lt; endl;
 	return 0;
 }</pre>
-			<p><samp>#ProgrammingIsCool<br/>-7 3.14159265358979323846<br/>true</samp></p>
+			<p class="output">#ProgrammingIsCool<br/>-7 3.14159265358979323846<br/>true</p>
 			<p>You can also do math on numeric data types. You can use the following operators:</p>
 			<dl>
 				<dt><code>+</code></dt>
@@ -291,7 +299,7 @@ int main () {
 	cout &lt;&lt; degF &lt;&lt; "F is " &lt;&lt; degC &lt;&lt; "C.";
 	return 0;
 }</pre>
-			<p><samp>58F is 14.4444C.</samp></p>
+			<p class="output">58F is 14.4444C.</p>
 			<p>It is important to note that you cannot mix and match data types. For example, you cannot do the following:</p>
 			<pre class="brush: cpp">int foo = "Hello, world!"</pre>
 			<p>The compiler would throw an error on this, because you are trying to assign string data to an integer; in other words you are violating the data type of <code>foo</code>.</p>
@@ -309,7 +317,7 @@ int main () {
             	<li>Decrement a double.</li>
             	<li>Increment a char. What did this do? (Why?)</li>
             </ul>
-            <h3 id="Input">Input</h3>
+            <h3 id="input">Input</h3>
             <p>So, we've seen how to use variables, but we're still only setting the values in the source itself -- what if we want the user to input the variables' values instead?
 				This is where <span class="italic">input</span> comes into play.</p>
 			<p>You might remember <code>cout</code> from the introductory program that you wrote. It was basically a stream that flowed from your program to the console screen.
@@ -352,27 +360,421 @@ int main () {
 				<li><code>a</code> was input before <code>b</code>.</li>
 				<li>The user put whitespace (space or enter) between the values <code>a</code> and <code>b</code>.</li>
 			</ul>
-			<p>But what if we didn't input a number? What if we typed <samp>Mwhahahaha!</samp> into the program where it was expecting a <code>double</code>?
+			<p>But what if we didn't input a number? What if we typed <span class="input">Mwhahahaha!</span> into the program where it was expecting a <code>double</code>?
 				Well, if you tried this, you would see the program spaz out, repeatably and unstoppably printing the last prompt.
-				What happened here is the <code>cin</code> stream object sees that the value <code>Mwhahahaha!</code> is not a double, so it continues looking through its own internal buffer for a double.
+				What happened here is the <code>cin</code> stream object sees that the value <span class="input">Mwhahahaha!</span> is not a double, so it continues looking through its own internal buffer for a double.
 				When it does this, it doesn't find a double, so it looks at the buffer again...infinite loop!
 				Do not worry about handling this case for now, all we want to do at the moment is just grab input from the user.</p>
             <h4 id="input-exercise">Guided exercise</h4>
             <p>Copy the Hello, World code from before, but make the following changes:</p>
             <ul>
             	<li>Before printing the <code>Hello</code> line, ask the user for their name (Note: you will need to print something to the screen to indicate to the user that they need to type something in!)</li>
-            	<li>Instead of printing <code>Hello, world!</code>, print <code>Hello, $user!</code>, where <code>$user</code> is the name that the user just entered (e.g. if the user enters <code>Paul</code>, it would print <code>Hello, Paul!</code>).
+            	<li>Instead of printing <code>Hello, world!</code>, print <code>Hello, $user!</code>, where <code>$user</code> is the name that the user just entered (e.g. if the user enters <span class="input">Paul</span>, it would print <code>Hello, Paul!</code>).
             	<li>After printing <code>Hello, $user!</code>, ask the user for two numbers. After the user has input the two numbers, add them and display the sum on the screen.</li>
             </ul>
-            <h3 id="if-else">If/Else statements</h3>
+            <h3 id="if-else"><code>if-else</code> statements</h3>
+            <p>So far, we've seen how to store data, print it to the screen, and how to retrieve data from the user. But, we still haven't been able to make decisions with the data that we get from the user.
+            	This is what <code>if-else</code> statements are for.</p>
+            <p>First, let's just look at an <code>if</code> statement by itself:</p>
+            <pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	double a;
+	
+	cout &lt;&lt; "Please input a number: ";
+	cin >> a;
+	
+	if (a &lt; 0) {
+		a = -a;
+	}
+	
+	cout &lt;&lt; "The absolute value of the number you entered is " &lt;&lt; a &lt;&lt; '.';
+	
+	return 0;
+}</pre>
+			<p>Let's start with the statement <code>a &lt; 0</code>.
+				<code>&lt;</code> is a comparison operator that will evaluate to <code>true</code> if the left hand side
+				is less than the right hand side, and <code>false</code> otherwise (i.e. it evaluates a <code>bool</code> value).</p>
+			<p>Now, we place this statement in parentheses, following the keyword <code>if</code>. After this, we open another code block
+				(code between the <code>{</code> and <code>}</code> symbols). This does basically what reads: if <code>a</code> is less than 0,
+				then execute the following block of code. If <code>a</code> is not less than 0, then the block of code will be skipped.</p>
+			<p>We used a comparison operator (<code>&lt;</code>), which implies that there are more comparison operators available.
+				All of C++'s comparison operators can be used to compare either variables or literals (or both),
+				as long as both sides are of the same type or can be converted to equivalent types.
+				All will evaluate to a <code>bool</code> value (<code>true</code> or <code>false</code>) based on the truth
+				of the statement they represent. Here is a list of the available comparison operators:</p>
+			<dl>
+				<dt><code>&lt;</code></dt>
+				<dd>"Less than" operator. Checks if the left-hand side (LHS) is strictly less than the right-hand side (RHS). Example: <code>x &lt; y</code></dd>
+				<dt><code>></code></dt>
+				<dd>"Greater than" operator. Checks if LHS is strictly greater than RHS. Example: <code>x > y</code></dd>
+				<dt><code>==</code></dt>
+				<dd>"Equal to" operator. Checks if LHS is equal to RHS. Note that this operator has two equals signs, not one (one equals sign is used for assignment).
+					Example: <code>a == b</code></dd>
+				<dt><code>!=</code></dt>
+				<dd>"Not equal to" operator. Checks if LHS is unequal to RHS. Example: <code> a != b</code>.</dd>
+				<dt><code>&lt;=</code></dt>
+				<dd>"Less than or equal to" operator. Checks if LHS is less than or equal to RHS. Example: <code>x &lt;= y</code></dd>
+				<dt><code>>=</code></dt>
+				<dd>"Greater than or equal to" operator. Checks if LHS is greater than or equal to RHS. Example; <code>x >= y</code></dd>
+			</dl>
+			<p>Now, what if we wanted to check multiple conditions in the same <code>if</code> statement?
+				We can combine boolean expressions (like <code>a &lt; 0</code>) using the <span class="italic">AND</span> (<code>&&</code>)
+				and <span class="italic">OR</span> (<code>||</code>) operators. When you AND two boolean expressions together, the result of the full compound expression
+				will be true only if <span class="underline">both</span> of the two expressions on either side are true (otherwise it will be false).
+				If you OR two boolean expressions together, the result will be true if <span class="underline">either</span> of the statements on either side
+				are true (one or both). Let's see an example:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	double a, b, foo;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	foo = a + b;
+	
+	//if a is less than 0 AND b is less than 0
+	if (a &lt; 0 &amp;&amp; b &lt; 0) {
+		foo = a - b; //overwriting foo
+	}
+	
+	//if foo is less than or equal to 32 OR foo is greater than or equal to 52 
+	if (foo &lt;= 32 || foo >= 52) {
+		cout &lt;&lt; "Your number is outside of +/-10 of my number." &lt;&lt; endl;
+	}
+	
+	cout &lt;&lt; "Your number is " &lt;&lt; foo &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="italic">Note: the <code>|</code> symbol can be typed with <kbd>Shift</kbd> + <kbd>\</kbd> (it is the vertical bar on the backslash key on most keyboards).</p> 
+			<p>Above, we see that if <span class="bold">both</span> <code>a</code> and <code>b</code> are negative, then <code>foo</code> will contain <code>a - b</code>;
+				otherwise <code>foo</code> will contain <code>a + b</code>. Then, if <code>foo</code> is less than or equal to 32 <span class="bold">or</span> foo is greater than 52,
+				we will print the text <samp>Your number is outside of +/-10 of my number.</samp></p>
+			<p>Additionally, there is another operator that is useful when dealing with <code>if</code> statements -- 
+				the <code>!</code> or <span class="italic">unary NOT</span> operator. This operator allows you to invert the truth value of the statement it precedes. For example:</p>
+			<pre class="brush: cpp">!(a &lt; b && x > y)</pre>
+			<p>If <code>a</code> is less than <code>b</code> and <code>x</code> is greater than <code>y</code>, then this statement will evaluate to <code>false</code>.
+				Otherwise, it will be <code>true</code>.</p>
+			<p>Now, what if you wanted to do something in the event the <code>if</code> statement evaluated to <code>false</code>? This is where you use an <code>else</code>:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	double a, b, foo;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	if (a &lt; 0 &amp;&amp; b &lt; 0) {
+		foo = a - b;
+	} else {
+		foo = a + b;
+	}
+	 
+	if (foo &lt;= 32 || foo >= 52) {
+		cout &lt;&lt; "Your number is outside of +/-10 of my number." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "Your number is within +/-10 of my number." &lt;&lt; endl;
+	}
+	
+	cout &lt;&lt; "Your number is " &lt;&lt; foo &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p>Now, we see that lines 13 and 19 will execute if the <code>if</code> statements on lines 10 and 16 (respectively) fail. Now, when the user enters a number that is inside of 42&pm;10, they
+				will see the message <samp>Your number is within +/-10 of my number.</samp></p>
+			<p>You can chain <code>if</code> and <code>else</code> statements to produce a number of mutually-exclusive options:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	double a, b, foo;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	/* Only one of the three code blocks below will run. Note that if the first
+	   case is true (both a and b are negative), then it does satisfy the second
+	   case (at least one is negative); however, only the first code block will
+	   run because the second case is preceded by an else. */
+	if (a &lt; 0 &amp;&amp; b &lt; 0) {
+		foo = a - b;
+	} else if (a &lt; 0 || b &lt 0) {
+		foo = -a + b;
+	} else {
+		foo = a + b;
+	}
+	 
+	if (foo &lt;= 32 || foo >= 52) {
+		cout &lt;&lt; "Your number is outside of +/-10 of my number." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "Your number is within +/-10 of my number." &lt;&lt; endl;
+	}
+	
+	cout &lt;&lt; "Your number is " &lt;&lt; foo &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p><code>if</code> and <code>else</code> blocks do not need to have enclosing curly braces if they only contain one statement. All of the following are valid:</p>
+			<pre class="brush: cpp">
+if (a &lt; b)
+	foo = bar + baz;
+else
+	foo = baz - bar;
+
+if (a &lt; b) foo = bar + baz;
+else if (a == b) foo = bar - baz;
+else foo = baz - bar;</pre>
+			<p>However, you <span class="underline">MUST</span> only have one line to do this, if you have multiple lines in your if statement, you will need enclosing curly braces:</p>
+			<pre class="brush: cpp">
+if (a &lt; b) {
+	foo = bar + baz;
+	baz = baz - foo;
+} else
+	foo = baz - bar;
+	bar = bar + foo;	//this line will *always* execute, regardless of which case above gets executed! Don't let the whitespace fool you!</pre>
+			<p class="italic">Fun fact: A <a href="http://www.thesafemac.com/apples-gotofail-ssl-bug/" target="_blank">bug exactly like the one above was introduced to Safari</a>
+				some time ago that made it accept the certificate of every site served over HTTPS, even if it was invalid.
+				This led a number of Safari users to believe their connection was secure when in reality it may not have been secure (the bug has since been fixed).</p> 
             <h4 id="if-else-exercise">Guided exercise</h4>
             <p>Using your modified Hello, World program from the Input section, make the following changes:</p>
             <ul>
             	<li>Ask the user to choose between English and the language you chose to study at school (if you are studying a language that does not use the Latin alphabet, use the Latin transliteration).
 					Make all output following that prompt in the user's chosen language (you can ignore accents and diacritics. Yes, I know it's incorrect, but just for simplicity's sake).</li>
-				<li>Before asking the user to input the two numbers, ask them if they want to add, subtract, multiply, or divide. Do the operation specified by the user on the two numbers.</li>
+				<li>Before asking the user to input the two numbers, ask them if they want to add, subtract, multiply, or divide. Do the operation specified by the user on the two numbers.
+					Print the result and one of the following:
+					<ul>
+						<li>If the result is strictly less than 32 print "Solid"</li>
+						<li>If the result is greater than or equal to 32 and strictly less than 212 print "Liquid"</li>
+						<li>If the result is greater than or equal to 212 print "Gas"</li>
+					</ul>
+				</li>
             </ul>
             <h3 id="loops">Loops</h3>
+            <p>Now that we have done <code>if-else</code> statements, we have just one more type of control structure to cover: or loops.
+				There are two kinds of loops: <code>for</code> loops and <code>while</code>/<code>do-while</code> loops.</p>
+			<p>Generally speaking, loops are what we call <span class="italics">iterative structures</span>; they iterate over the same code multiple times
+				until some condition (just like a condition we might use for an <code>if</code> statement) is broken. Each pass of a loop is called an <span style="italic">iteration</span>.</p>
+			<h4 id="for-loops"><code>for</code> loops</h4>
+			<p>A <code>for</code> loop runs a block of code for a determined number of times. Let's look at an example:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	for (int x = 0; x &lt; 10; ++x) {
+		cout &lt;&lt; x &lt;&lt; endl;
+	}
+	return 0;
+}</pre>
+			<p class="output">0<br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/></p>
+			<p>First, let's look at the <code>for</code> loop syntax:</p>
+			<pre class="brush: cpp">for (initialization; condition; increment)</pre>
+			<p>The idea here is that we initialize a <span class="italic">control variable</span> for the loop, and then on every iteration, run the increment and condition statements on that control variable.
+				Let's look at each individual component of a <code>for</code> loop:</p>
+			<dl>
+				<dt>Initialization (e.g. <code>int x = 0</code>)</dt>
+				<dd>This statement is executed just before the loop begins, and is used to initialize the loop's control variable (when necessary, see below).
+					You can use an existing variable as a control variable, but you can also declare one inline (as shown above).
+					If you choose to declare the control variable inline, <span class="italic">it will only exist inside the loop</span> (see <a href="#scoping">scoping</a>).</dd>
+				<dt>Condition (e.g. <code>x &lt; 10</code>)</dt>
+				<dd>This condition is evaluated <span class="italic">before</span> each iteration. If it ever evaluates to <code>false</code>, the loop will exit without executing the next iteration.
+					It is important to note that if the condition fails the first time it is checked (before the first iteration), the loop will exit immediately, and the loop body 
+					<span class="italic">Note how our example code did not print the number <code>10</code> -- this is because when <code>x</code> was set to <code>10</code>,
+					the condition failed, and the loop exited.</span></dd>
+				<dt>Increment (e.g. <code>++x</code>)</dt>
+				<dd>This statement is executed <span class="italic">after</span> each iteration, but before the condition for the next iteration is evaluated.
+					This is used to update the control variable between iterations. Note that although this is called the "increment" field of a <code>for</code> loop,
+					you don't have to increment -- you can perform any valid math operation that updates the control variable.</dd> 
+			</dl>
+			<p>Note that these statements aren't required -- you can omit them if you don't need them (for example, if you have already initialized the loop's control variable in preceding code).
+				However, the two semicolons are still required, so you can do something like this:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int userNum, curNum;
+	
+	cout &lt;&lt; "Please input a number: ";
+	cin &gt;&gt; userNum;
+	
+	curNum = userNum + 1;
+	
+	cout &lt;&lt; "The next five numbers are: ";
+	
+	//Note how the initialization statement is omitted below
+	for (; curNum &lt;= userNum + 5; ++curNum)
+		cout &lt;&lt; curNum &lt;&lt; ' ';
+	//Like an if statement, we can omit the curly braces if it's just a one-liner
+	
+	cout &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">Please input a number: <span class="input">65</span><br/>The next five numbers are: 66 67 68 69 70</p>
+			<p>You can also create an infinite loop by omitting all of the <code>for</code> loop parameters:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+/*
+	A rudimentary implementation of the unix `yes` command
+	https://linux.die.net/man/1/yes
+*/
+
+int main () {
+	for (;;) {
+		cout &lt;&lt; 'y' &lt;&lt; endl;
+	}
+	return 0;
+}</pre>
+			<p>You should try to avoid infinite loops whenever possible, however. Even if you're using a <a href="#loop-control-statements"><code>break</code></a> statement to stop the
+				loop execution, it is generally considered bad style. You should always have <span class="italic">some</span> exit condition given to the loop.</p>
+			<p>As mentioned above, you can do anything to the control variable during the increment step; it is only called "increment" because that is what is usually done during that step.
+				Here's a <code>for</code> loop that does something different with its control variable:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	for (int x = 25; x >= 0; x -= 5) cout &lt;&lt; x &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">25<br/>20<br/>15<br/>10<br/>5<br/>0</p>
+			<h4 id="while-loops"><code>while</code>/<code>do-while</code> loops</h4>
+			<p>The idea behind the <code>for</code> loop is that the loop is supposed to execute a set number of times.
+				That number might be determined at runtime by variables, or it might be hard-coded. However, it is not meant to
+				be used in cases where you want to continue looping until some condition is met. This is where <code>while</code> and
+				<code>do-while</code> loops are used. Let's look at a <code>while</code> loop first:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string input;
+	
+	while (input != "yes") {
+		cout &lt;&lt; "Would you like to quit? ";
+		cin >> input;
+	}
+	
+	return 0;
+}</pre>
+			<p>This program is fairly straightforward. It loops, asking the user if they want to quit until they enter <span class="input">yes</span>.
+				So, all the <code>while</code> loop does is check the condition it is given <span class="italic">before</span> each iteration (much like a <code>for</code> loop),
+				and if the condition ever evaluates to <code>false</code>, then the loop stops.</p> 
+			<p>The big thing to note about <code>while</code> loops is that, like a <code>for</code> loop, if the condition is false before the first iteration, the loop body will never execute;
+				for example, the following loop would never execute:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string input = "yes";
+	
+	while (input != "yes") {
+		cout &lt;&lt; "Would you like to quit? ";
+		cin >> input;
+	}
+	
+	return 0;
+}</pre>
+			<p>Because <code>input</code> is already set to <code>"yes"</code>, the condition for the <code>while</code> loop would evaluate to <code>false</code> before the first execution,
+				so the loop would immediately exit.</p>
+			<p>Now, let's look at a <code>do-while</code> loop. They are quite similar to <code>while</code> loops:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string input;
+	
+	do {
+		cout &lt;&lt; "Would you like to quit? ";
+		cin >> input;
+	} while (input != "yes");
+	
+	return 0;
+}</pre>
+			<p>The above code is functionally equivalent to the original program we wrote for <code>while</code> loops -- it loops until the user enters <span class="input">yes</span> and then quits.
+				Note that the condition ends in a semicolon -- it is required.</p>
+			<p>The difference between a <code>while</code> loop and a <code>do-while</code> loop is that a <code>do-while</code> loop checks its condition
+				<span class="italic">after</span> each loop iteration (which is why the condition is placed at the end of the loop). This minor difference means that, unlike a <code>while</code>
+				loop, a <code>do-while</code> loop <span class="italic">will always execute at least once</span>. Our example from earlier would no longer skip executing the loop body:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	string input = "yes";
+	
+	do {
+		//this always executes at least once!
+		cout &lt;&lt; "Would you like to quit? ";
+		cin >> input;
+		
+		//because input is overwritten, we see the same exact behavior
+		//as the previous example
+	} while (input != "yes");
+	
+	return 0;
+}</pre>
+			<p>The choice between a <code>while</code> and <code>do-while</code> loop is up to the discretion of (you!) the programmer, however <code>while</code> loops are typically preferred where
+				the implementation would not otherwise differ at all between the two choices. If you need to ensure that the loop runs at least once, use a <code>do-while</code> loop.</p>
+			<h4 id="loop-control-statements">Loop control statements</h4>
+			<p>Now that you are familiar with the different types of loops that C++ has to offer, let's look at two language keywords that C++ has for dealing with loops:
+				<code>break</code> and <code>continue</code>. Both keywords only have meaning inside of a loop body (except for <code>break</code> in a
+				<a href="https://hal7df.github.io/pauls-tutorials/cpp/ch1/switch-case.html" target="_blank"><code>switch-case</code></a> statement); the compiler will throw an error if it finds them
+				anywhere else.</p>
+			<p><code>break</code> tells the loop to stop executing at the current position in the loop and resume execution after the end of the loop.
+				This happens regardless of whether the loop condition is <code>false</code> or not.</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	for (int i = 0; i &lt; 10; ++i) {
+		cout &lt;&lt; i &lt;&lt; ' ';
+		
+		//Loop will stop if i == 5
+		if (i == 5) break;
+	}
+	
+	cout &lt;&lt; endl &lt;&lt; "Done" &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">0 1 2 3 4 5<br/>Done</p>
+			<p><code>continue</code> tells the loop to skip executing the rest of the current iteration and move on to the next iteration.
+				This does <span class="underline">not</span> skip the condition check, so if the condition fails, the loop will exit anyways.</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	for (int i = 0; i &lt; 10; ++i) {
+		//Loop will skip printing if i == 5
+		if (i == 5) continue;
+		
+		cout &lt;&lt; i &lt;&lt; ' ';
+	}
+	
+	cout &lt;&lt; endl &lt;&lt; "Done" &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">0 1 2 3 4 6 7 8 9<br/>Done</p>
+			<p>There are ongoing debates about whether the use of these keywords (predominantly <code>break</code>) is considered "good style".
+				Generally speaking, however, using something like <code>break</code> is fine as long as it "reads well", in other words, if using
+				<code>break</code> makes your code easier for someone else to understand, then it is fine. However, a <code>break</code> should
+				<span class="bold">never</span> be used in place of a loop condition. A good use of a <code>break</code> statement would be
+				with error detection -- if you find an error in the middle of your loop and need the loop to stop, you can use a <code>break</code>.</p>
             <h4 id="loops-exercise">Guided exercise</h4>
             <p>Write the following two programs. Be sure to use a loop:</p>
             <ul>
@@ -380,7 +782,7 @@ int main () {
             	<li>Ask the user for a number until the user enters a negative number, then output the sum of the numbers (including the negative number).</li>
             </ul>
             <p>You're all done for today's walkthrough! Head over to the repl.it classroom and get started on today's exercise.</p>
-          </div> 
+          </div>
         </div>
        </main>
       </div>
