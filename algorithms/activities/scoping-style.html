@@ -47,7 +47,492 @@
 			</ul>
 				
             <h3 id="scoping">Scoping and variable lifetimes</h3>
+            <p>Every program needs to manage its memory efficiently. For example, if a section of code is not currently running 
+				(or paused), then it is usually a good idea for the program to remove any variables that belonged to that part of the
+				program from memory. However, thus far, you haven't ever told your program to remove these variables,
+				and yet it is doing this all by itself, so the question stands: how does it know when a variable is no longer being used?</p>
+			<p>The answer is that all of the variables you have used so far have <span class="italic">automatic storage duration</span>, in other words,
+				they are removed from memory at specific points in your program based on how you have written your program. Understanding when and where
+				your variables exist will help you both find out why your code doesn't work as you expect it to, and write better code.</p>
+			<p class="italic">Note: It is possible to create variables that do not have automatic storage duration; however, this is outside of the scope
+				(pun intended) of this course, as managing these variables correctly is often difficult and is easy to do wrong if you're not careful.</p>
+			<h4 id="scope">Scopes</h4>
+			<p>Automatic storage duration is determined by <span class="italic">scopes</span>. A scope is essentially any block of your program that is surrounded by 
+				curly braces (<code>{</code> and <code>}</code>). This includes the <code>main</code> function, any code blocks you have following <code>if</code>
+				and <code>else</code> statements, and loop bodies (Additionally, <code>for</code> loops create a scope for one-line loop bodies).
+				You can even create scopes that have no control structures attached to them, like so:</p>
+			<pre class="brush: cpp">
+int main () {
+	int a, b, c;
+	
+	{
+		double d = 0.1;
+		a = 5;
+		
+		d += static_cast&lt;double>(a); //convert int to double
+	}
+	
+	//d == ?
+	
+	return 0;
+}</pre>
+            <p>Whenever you declare a variable inside a scope, that variable exists inside of that scope <span class="italic">only</span>. If you try to access that variable outside of the scope
+				(before or after), you will get a compiler error. So, in the above example, <code>d</code> would not even exist on line 11.</p>
+			<h5 id="nested-scopes">Nested scopes</h5>
+			<p>As you have probably guessed by the above example (and from <code>if-else</code> statements and loops), you can nest scopes.
+				Nested scopes have access to the variables declared in all of its parent scopes, and changes to those variables will persist after the nested scope stops executing.
+				For example:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int a = 0;
+	int b = 15;
+	{
+		{
+			a += b;
+			a -= 2;
+		}
+	}
+	cout &lt;&lt; a &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">13</p>
+			<p>However, what if we declare a variable in the inner scope with the same name as a variable in the outer scope? Let's see:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int a = 1;
+	{
+		int a = 2;
+		cout &lt;&lt; a &lt;&lt; endl;
+	}
+	return 0;
+}
+</pre>
+			<p class="output">2</p>
+			<p>Firstly, you may be surprised that it even compiles -- how come it lets us declare the variable <code>a</code> twice?
+				Well, the first <code>a</code> -- the one that was assigned a value of <code>1</code> -- lives in <code>main</code>'s outer scope, while
+				the second <code>a</code> -- the one that was assigned a value of <code>2</code> -- lives in the inner scope. As such, the compiler has
+				a way to distinguish the two.</p>
+			<p>Now, why does it output 2? This is where one of the most important rules of scoping comes into play --
+				<span class="italic">if there are name conflicts between variables in nested scopes, the compiler always chooses the variable from the
+				most specific/deepest scope.</span> Since the second <code>a</code> was declared in a deeper scope, it takes precedence.
+				If we were to move the <code>cout</code> statement after the end of the inner scope, we would see this program output <code>1</code>,
+				as the second <code>a</code> does not exist outside of the inner scope, so the first <code>a</code> is the only variable named <code>a</code>
+				that exists at that particular point.</p>
+			<p>Generally, however, you should always try to avoid naming conflicts between scopes -- it makes your code much easier to read if all variables
+				have unique names, even between scopes; plus you will be much less likely to encounter confusing bugs.</p>
+			<h5 id="loop-scoping">Loop scoping</h5>
+			<p>Loops are a little peculiar when it comes to scoping. Let's try to declare a variable in a loop and do something with it:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	for (int i = 0; i &lt; 5; ++i) {
+		int a = 0;
+		cout &lt;&lt; a &lt;&lt; endl;
+		++a;
+	}
+	return 0;
+</pre>
+			<p class="output">0<br/>0<br/>0<br/>0<br/>0</p>
+			<p>OK, that's a little weird...shouldn't it have printed out the numbers 0 through 4? Well, there are a couple of factors that cause the above behavior:</p>
+			<ul>
+				<li>You are setting <code>a</code> to <code>0</code> at the beginning of <span class="italic">every iteration</span>.</li>
+				<li>The scope ends after each iteration. In other words, all of the variables that existed in the last iteration no longer exist, and in their place fresh ones have been created.</li>
+			</ul>
+			<p>The second point is the bigger one here -- <span class="italic">variables you declare in a loop body are deleted after <span class="underline">every iteration</span>,
+				only to be created anew on the next iteration</span>. So, if you declare a variable in a loop, it will not hold data across loop iterations.</p>
+			<p>The scoping of the <code>for</code> loop's control variable is even weirder:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+        for (int i = 0; i &lt; 10; ++i) {
+                cout &lt;&lt; i &lt;&lt; endl;
+        }
+        cout &lt;&lt; i &lt;&lt; endl;
+        return 0;
+}</pre>
+			<p class="compiler">scoping.cpp:8:10: error: name lookup of 'i' changed for ISO 'for' scoping [-fpermissive]</p>
+			<p>The error above is telling you that <code>i</code> exists only inside the <code>for</code> loop; so its scope is actually in the loop body
+				(despite the fact that it was not declared between the curly braces). So, let's remove that last print statement:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+        for (int i = 0; i &lt; 10; ++i) {
+                cout &lt;&lt; i &lt;&lt; endl;
+        }
+        return 0;
+}</pre>
+			<p class="output">0<br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</p>
+			<p>So, <code>i</code> belongs to the loop body scope, but it is retaining its value!
+				Didn't we just say that the variables declared in a loop scope are deleted after each iteration?</p>
+			<p>The <code>for</code> loop's control variable is special. Because it needs to retain its value between iterations in order for the loop to function as expected,
+				it is <span class="underline">not</span> deleted between iterations. However, because the variable still belongs to the loop, it is not accessible outside of the loop.</p>
+			<h5 id="global-scope">The global scope</h5>
+			<p>So, now you know how scopes work, let's examine the most bizarre scope of them all: the global scope.
+				The global scope is simply the scope that exists from the start of your source file to the end of the source file.
+				Unlike other scopes, it is not enclosed by curly braces -- the compiler always knows when it starts and ends based on the input file.</p>
+			<p>As of right now, we have not done much with the global scope, other than to <code>#include &lt;iostream&gt;</code>, use the <code>std</code> namespace,
+				and define <code>main</code> (As we proceed with this class, you will see more things be placed in the global scope). However, it is a scope, so you can
+				declare variables in it, just like any other:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int a = 5;
+
+int main () {
+	cout &lt;&lt; a &lt;&lt;
+	return 0;
+}</pre>
+			<p class="output">5</p>
+			<p>Since <code>main</code> is a nested scope, it reads up to the global scope and gets the value <code>5</code> for <code>a</code>.
+				Variables declared on the global scope are accessible in <span class="italic">all scopes in a source file</span>
+				-- when we talk about functions, you can see that variables declared on the global scope are accessible in functions other than <code>main</code> as well.</p>
+			<p>Name resolution works just as we described earlier with regards to variables on the global scope:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int a = 5;
+
+int main () {
+	int a = 6;
+	cout &lt;&lt; a &lt;&lt;
+	return 0;
+}
+</pre>
+			<p class="output">6</p>
+			<p>Now, the important thing you should know about the global scope is that you should <span class="bold">never declare variables or write code on the global scope</span>.
+				This is considered incredibly poor practice.</p>
+			<p>Why? Because your code is not the only thing being placed on the global scope -- everything you <code>#include</code> is put on the global scope
+				(unless you <code>#include</code> it in a nested scope, but doing so will have unintended side effects; you should always <code>#include</code> on the global scope), and
+				the chances of you declaring a variable with the same name as something provided by a header file you included are much higher. This is an actual problem -- without the scope
+				difference, the compiler will think you are trying to redeclare something, which is <span class="italic">not</span> allowable. However, if you declare all of your variables
+				in scopes nested in the global scope, you can avoid this naming conflict by taking advantage of the name resolution process.</p>
+			<p>In fact, this is the reason for the <code>using namespace std;</code> line at the beginning of the file --
+				the designers of C++ were concerned that putting all of the standard library would "pollute" the global scope, they created a named scope (a namespace) called <code>std</code>
+				that would not interfere with the global scope of any program (other than the name <code>std</code>). By placing <code>using namespace std;</code> at the beginning of the file,
+				we are promising not to declare anything on the global scope that has the same name as anything in the standard library on the global scope, so we can treat objects and functions
+				provided by the standard library as if they were on the global scope (and avoid having to explicitly say that they come from the <code>std</code> scope).</p>
+			<h4 id="scoping-activity">Activity</h4>
+			<p>You will not need repl.it for this activity. Consider the following code:</p>
+			<pre class="brush: cpp; highlight: [25]">
+#include &lt;iostream&gt;
+using namespace std;
+
+int a = 5;
+
+int main () {
+	double b = 4.3;
+	string str = "Hello World!";
+	
+	if (b &lt; a) {
+		string str2 = "Programming is cool";
+		cout &lt;&lt; str &lt;&lt; ' ' &lt;&lt; str2 &lt;&lt; endl;
+		b = static_cast&lt;double&gt;(a) + b;
+	}
+	
+	//Call this scope "C"
+	{
+		bool c = (a &lt; b);
+		cout &lt;&lt; str2 &lt;&lt; "? " &lt;&lt; boolalpha &lt;&lt; c &lt;&lt; endl;
+		
+		//Call this scope "D"
+		{
+			double c = b - static_cast&lt;double&gt;(a);
+			int e = 42;
+			cout &lt;&lt; c &lt;&lt; endl;
+		}
+		
+		++e;
+	}
+	
+	cout &lt;&lt; e &lt;&lt; endl;
+	
+	for (int i = 0; i &lt; 10; ++i) {
+		cout &lt;&lt; i &lt;&lt; endl;
+	}
+	
+	cout &lt;&lt; (i + a) &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p>Answer the following:</p>
+			<ol>
+				<li>Identify the scope of each variable.</li>
+				<li>What is the output from the <code>cout</code> statement on the highlighted line?</li>
+				<li>Find all the scoping bugs in the code.</li>
+			</ol>
             <h3 id="style">Code style</h3>
+            <p>As has been mentioned, C++ compilers are very lenient about the amount of whitespace you have in your code, so long as it does not change the meaning of a statement
+            	(for example, <code>int foo</code> and <code>intfoo</code> do not mean the same thing). However, one of the most important aspects of learning to code is learning how
+            	to write it effectively so that someone else can sit down in front of it and understand what your code does. This not only helps with communication in team software
+				projects, but it also helps anyone who looks at your code long after you have moved on.</p>
+			<p>Style is not the focus of this enrichment, and we will not be spending much time discussing style. However, it is very important that you learn and practice good coding
+				style habits early, as you learn how to write code. This section will introduce you to some of basic style recommendations, and the reasons for those recommendations.</p>
+			<p>If you look around online, you will quickly discover that there is no one definitive coding style guide. Different people follow different guidelines depending on what suits their needs.
+				Since we are only just learning programming, I am not expecting you to follow any particular set of style rules, however, I will be inspecting your exercise submissions to
+				provide you with feedback on your coding style.</p>
+			<p>But above all else, the number one coding style rule is <span class="bold">always be consistent</span>. Do not change what style rules you're following halfway through the source
+				(or, if you are working on a multi-file project, in the middle of the project). This will be the biggest thing I look for when I look at your coding exercises.</p>
+			<h4 id="indentation">Indentation</h4>
+			<p>Indentation is the most ubiquitous style rule. Proper indentation helps communicate the structure in your code, even if the indentation itself serves no
+				structural purpose. Let's look a badly indented example:</p>
+			<pre class="brush: cpp">
+//*** BAD. DO NOT DO THIS. ***
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+int a;
+int b;
+
+cout &lt;&lt; "Please input two numbers: ";
+cin >> a >> b;
+
+if ((a + b) &lt; 0) {
+cout &lt;&lt; "The result is negative." &lt;&lt; endl;
+} else if ((a + b) > 0) {
+cout &lt;&lt; "The result is positive." &lt;&lt; endl;
+} else {
+cout &lt;&lt; "The result is 0." &lt;&lt; endl;
+}
+
+return 0;
+}</pre>
+			<p>It may take you a moment for you to figure out what the structure is here: lines 6 - 20 belong to <code>main</code>, and lines 13, 15, and 17 belong
+				to <code>if</code> statements. However, with proper indentation, this structure becomes almost immediately obvious:</p>
+			<pre class="brush: cpp">
+//Good example of indentation
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int a;
+	int b;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	if ((a + b) &lt; 0) {
+		cout &lt;&lt; "The result is negative." &lt;&lt; endl;
+	} else if ((a + b) > 0) {
+		cout &lt;&lt; "The result is positive." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "The result is 0." &lt;&lt; endl;
+	}
+	
+	return 0;
+}</pre>
+			<p>While this change may not seem to make much of a difference with this example, in large software projects where there are, on average,
+				~100k lines of code, with somewhere between 500-1000 lines of code per file (and the code is much more complex), this makes a huge difference.</p>
+			<p>So, with regards to indentation, here are some general guidelines:</p>
+			<ul>
+				<li>Use equal spacing at all levels of indentation (for example, do not indent 4 spaces at the first level and then indent 2 spaces at the next level).</li>
+				<li>The contents of each scope should be indented one level further than its parent scope. One-liners for <code>if-else</code> statements and loops should
+					also be indented by one level if wrapped to the next line.
+					<ul>
+						<li>Closing curly braces for scopes (<code>'}'</code>) should have the same indentation as the parent scope.
+					</ul>
+				</li>
+			</ul>
+			<p>Most of the variation in style with regards to indentation has to do with whether you should use a tab character or spaces for indentation
+				(most modern code editors can insert either when you hit the Tab key), or how many spaces should be used to indent (usually 2, 4, or 8). Again, I do
+				not care what choice you make for either of these, as long as you are consistent.</p>
+			<h4 class="code-spacing">Code spacing</h4>
+			<p>Inserting empty lines into your code also helps visually break your code apart into related "chunks". Again, let's do a bad example-good example analysis:</p>
+			<pre class="brush: cpp">
+//*** BAD. DO NOT DO THIS. ***
+#include &lt;iostream&gt;
+using namespace std;
+int main () {
+	int a;
+	int b;
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	if ((a + b) &lt; 0) {
+		cout &lt;&lt; "The result is negative." &lt;&lt; endl;
+	} else if ((a + b) > 0) {
+		cout &lt;&lt; "The result is positive." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "The result is 0." &lt;&lt; endl;
+	}
+	return 0;
+}</pre>
+			<p>This really just looks like a giant blob of code, and is difficult to make sense of at first. This example does a good job of separating "chunks" of related code:</p>
+			<pre class="brush: cpp">
+//Good example of code separation
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int a;
+	int b;
+	
+	//Get user input
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	//Output sign of the sum of the two input numbers
+	if ((a + b) &lt; 0) {
+		cout &lt;&lt; "The result is negative." &lt;&lt; endl;
+	} else if ((a + b) > 0) {
+		cout &lt;&lt; "The result is positive." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "The result is 0." &lt;&lt; endl;
+	}
+	
+	return 0;
+}</pre>
+			<p>As you can see, in addition to separating related code by whitespace, the author has also put comments at the beginning of some of the "chunks" to quickly describe
+				their purpose. While this is not <span class="italic">necessary</span>, it is very helpful for others when they are trying to understand your code. Adding comments
+				around especially confusing "chunks" can also be helpful for you to navigate your own code in the future, should you ever need to revisit it.</p>
+			<p>Here are some general guidelines for code spacing:</p>
+			<ul>
+				<li>Separate "chunks" or "paragraphs" of code using a single empty line.</li>
+				<li>Function definitions (e.g. <code>main</code>) should be separated by single empty lines.
+					If a function definition is at the end of a file, a trailing newline is not necessary, but it is recommended
+					(some text editors may enforce this anyways).</li>
+				<li>Comments should appear alongside the "chunk" the refer to. If placed at the beginning, the empty newline
+					should appear above the comment, with the code "chunk" appearing immediately on the next line.</li>
+			</ul>
+			<h4 id="operator-spacing">Operator spacing</h4>
+			<p>Operators in C++ do not care a lot about spacing, however, how you space operator arguments from the operator can help communicate
+				what operation you are performing.</p>
+			<p>First, let us quickly define two types of operators: <span class="italic">binary</span> and <span class="italic">unary</span> operators.
+				A binary operator is any operator that has two operands/arguments. Addition (<code>+</code>), division (<code>-</code>), assignment (<code>=</code>),
+				and inequality comparison (<code>!=</code>) are all examples of binary operators. On the other hand, a unary operator is any operator that has just one
+				operand/argument. Increment/decrement (<code>++</code> and <code>--</code>), arithmetic negation (<code>-</code> as in <code>-5</code>), and logical negation
+				(<code>!</code> as in <code>!that</code>) are all examples of unary operators.</p>
+			<p>The style rules for operators are not as clear cut as the ones we have discussed so far, but here is my recommendation:</p>
+			<ul>
+				<li>Binary operators should be separated from their operands by a single space on either side.</li>
+				<li>Unary operators should have no space between themselves and their operand.</li>
+			</ul>
+			<p>Here's an example:</p>
+			<pre class="brush: cpp">
+//Operator spacing example
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	int a;
+	int b;
+	bool negative;
+	
+	//&lt;&lt; and >> are binary operators
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	//= and &lt; are binary operators
+	negative = ((a + b) &lt; 0);
+	
+	if (negative) {
+		cout &lt;&lt; "The result is negative." &lt;&lt; endl;
+	} 
+	//! is a unary operator. && and != are binary operators.
+	else if (!negative && (a + b) != 0) {
+		cout &lt;&lt; "The result is positive." &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "The result is 0." &lt;&lt; endl;
+	}
+	
+	return 0;
+}</pre>
+			<p>Commas are not (usually) operators, however, whenever you use a comma, use it like you would in English:</p>
+			<pre class="brush: cpp">
+//Comma spacing
+#include &lt;iostream&gt;
+using namespace std;
+
+void doSomething (int x, int y);
+
+int main () {
+	int a, b;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	doSomething(a, b);
+	
+	return 0;
+}
+
+void doSomething (int x, int y) {
+	for (; x &lt; y; ++x, --y) {
+		//The comma below is a literal comma character, ignore it with respect to style
+		cout &lt;&lt; '(' &lt;&lt; x &lt;&lt; ',' &lt;&lt; y &lt;&lt; ')' &lt;&lt; endl;
+	}
+}</pre>
+			<h4 id="opening-braces">Opening braces</h4>
+			<p><a href="https://pics.onsizzle.com/int-main-int-main-mare-programmers-civil-war-2513794.png" target="_blank">This is one of the most contentious issues in coding style</a>
+				(the other being tabs vs. spaces). Basically, your two options are as follows:</p>
+			<pre class="brush: cpp">
+int main () {
+}
+
+// ** OR **
+
+int main ()
+{
+}
+</pre>
+			<p>Neither is incorrect, just be consistent. This rule applies to all control structures (functions, <code>if-else</code> statements, loops, classes, etc.), so make
+				sure to use the same choice for all opening braces. <span class="italic">Note that this rule makes little sense when applied to scopes without any control structures attached to them</span>.</p>
+			<p>Another closely related style aspect is whether to place a space before an open parenthesis (be it in a math formula, the condition for an if statement or a loop, or a function call).
+				Again, there is no right or wrong way to do this, but here is my recommendation:</p>
+			<pre class="brush: cpp">
+//Put a space before the open parenthesis in function prototypes
+int doSomething (int x, int y);
+
+//Put a space before the open parenthesis in function definitions
+int main () {
+	int a, b;
+	
+	cout &lt;&lt; "Please input two numbers: ";
+	cin >> a >> b;
+	
+	//Do not put a space before the open parenthesis in a function *call*
+	cout &lt;&lt; "The result is " &lt;&lt; doSomething(a, b) &lt;&lt; '.' &lt;&lt; endl;
+	
+	return 0;
+}
+
+//Put a space before the open parenthesis in function definitions
+int doSomething (int x, int y) {
+	/* Put a space before the open parenthesis in an if statement. Do not put
+	   a space before open parentheses in arithmetic or logic statements */
+	if ((x + y) > 0) {
+		return x - y;
+	} else {
+		/* Put a space before the open parenthesis in a loop condition. Here,
+		   we still follow the rule "no space before open parenthesis in 
+		   arithmetic", but the spacing around the '=' operator takes
+		   precedence. */
+		for (int i = (y - x); i &lt; 0; ++i) {
+			y += i;
+		}
+		return y;
+	}
+}
+</pre>
+			<h4 id="style-conclusion">Conclusion</h4>
+			<p>There are more style rules that we could discuss; it would take a long time for me to enumerate them all here.
+				The point of this section is not to teach and subsequently enforce a strict coding style, but rather to expose you
+				to what considerations we make when we are writing code in good style. I recommend that you read this section, and
+				make a mental note of what style works for you, and then stick to that style when you write code.
+				As always, ensure that you are being consistent.</p>
           </div>
         </div>
        </main>
