@@ -8,8 +8,22 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 	<link rel="stylesheet" href="res/style.css">
 	<script type="text/javascript" src="res/material.min.js"></script>
+	<script type="text/javascript">
+		function focusTab () {
+		    if (location.hash.length === 0) return;
+		    
+		    var tabs = document.getElementsByClassName("mdl-layout__tab-bar")[0].children;
+		    
+		    for (var i = 0; i < tabs.length; ++i) {
+		        if (('#' + tabs[i].href.split('#')[1]) === location.hash) {
+		            tabs[i].click();
+		            break;
+		        }
+		    }
+		}
+	</script>
 </head>
-<body class="mdl-base">
+<body class="mdl-base" onload="focusTab()">
 	<div class="mdl-layout mdl-js-layout">
 		<header class="mdl-layout__header">
 			<div class="mdl-layout__header-row mdl-layout--large-screen-only">
@@ -129,17 +143,15 @@
 					<div class="mdl-cell mdl-cell--4-col">
 						<div class="mdl-card mdl-shadow--2dp content-card">
 							<div class="mdl-card__title">
-								<h2 class="mdl-card__title-text">Scoping and style</h2>
+								<h2 class="mdl-card__title-text">Functions</h2>
 							</div>
 							<div class="mdl-card__supporting-text">
-								<div class="bold">ASIDE</div>
-								Scoping and code style are two important topics to know about moving forward, but we will not be spending too much time on them in class due to time constraints.
-								Please read this article if you finish early on a task or exercise.
+								<div class="bold">NOV 4</div>
+								Now that you have covered the basics of coding in C++, our first more "advanced" topic is functions. Functions help you to abstract parts of your code
+								so that you can rely on the same piece of code in multiple places in your source.
 							</div>
 							<div class="mdl-card__actions mdl-card--border">
-								<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="activities/scoping-style.html">Read</a>
-								<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="activities/scoping-style.html#scoping">Scoping</a>
-								<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="activities/scoping-style.html#style">Code style</a>
+								<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="activities/functions.html">Read</a>
 							</div>
 						</div>
 						<div class="mdl-card mdl-shadow--2dp content-card">
