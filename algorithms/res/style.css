@@ -15,6 +15,12 @@ h1,h2,h3,h4,h5 {
 	width: 90%;
 }
 
+#schedule,
+#schedule thead,
+#schedule tbody {
+	max-width: 100%;
+}
+
 #schedule td:not(:first-of-type),
 #schedule th:not(:first-of-type) {
 	padding-left: 24px;
@@ -30,7 +36,8 @@ h1,h2,h3,h4,h5 {
 }
 #xkcd-card img {
 	width: auto;
-	height: 300px;
+	max-height: 300px;
+	max-width: 100%;
 }
 
 .mdl-layout__header-row.mdl-layout__tab-bar {
