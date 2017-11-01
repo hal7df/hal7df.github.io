@@ -48,8 +48,6 @@ h1,h2,h3,h4,h5 {
 	background: #ffffff;
 }
 
-/*
-.mdl-layout__tab-bar-left-button {
-	overflow: hidden;
+.mdl-layout__tab-bar {
+	overflow-x: auto;
 }
-*/

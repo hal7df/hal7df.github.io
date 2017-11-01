@@ -15,7 +15,7 @@
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Scoping and style &#8212; IA Algorithms Enrichment 2017</title>
+	<title>Functions &#8212; IA Algorithms Enrichment 2017</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="../res/material.min.css">
 	<link rel="stylesheet" href="../res/page.css">
@@ -41,9 +41,204 @@
               <a href="../index.html#activities">Activities</a> &gt; Nov 4 &gt; Functions
             </div>
             <h2>Functions</h2>
+			<p>So far, you have learned how to create variables, write text and data to the screen, receive input from the user, make decisions based on data held in variables, and loop
+				code based on a condition. And, in truth, this is tha majority of all you really need to write any program you want in C++ (the other useful thing to have is the ability to make arrays,
+				which we will discuss shortly) -- these features are what makes C++ <span class="italic">Turing complete</span>, or capable of solving any problem a computer can solve.
+				But the problem is that writing more advanced programs than the ones you have seen so far are incredibly difficult without the use of more higher-level programming language features
+				(i.e. those that create arbitrary constructs and translate them into). So, the first such construct we will look at is a function.</p>
+			<p>A function in programming is not too different from a function that you might use in algebra. It takes in an input and spits out an output by doing something to that input.
+				However, functions in programming can do a lot more than what we typically use them for in math. To elaborate:</p>
+			<ul>
+				<li>A function can take any number of inputs, or no inputs at all</li>
+				<li>The inputs of a function can be of any data type (including <code>string</code>!), and they need not all be the same</li>
+				<li>A function can "return" (output) any data type (including <code>string</code>!), or return nothing at all</li>
+			</ul>
+			<p>In programming, we typically use functions to avoid writing repetitive code, as well as to organize our code. If we find ourselves writing the same code (or very similar code) several times
+				over and over again, we begin setting ourselves up for failure: if one of those instances of that code fails, we have to spend lots of time trying to find it and debug it; if
+				<span class="italic">all</span> of the instances fail, we have to spend time debugging and fixing <span class="italic">every single one of them</span>, and it can be hard to distinguish
+				one instance from another. Functions provide a handy interface for us to <span class="italic">abstract</span> code like this and use it quickly elsewhere in the code, without much hassle.
+				The added benefit is if the function is wrong, or needs to be improved, and you fix or improve that function, <span class="underline">all other code that uses that function is fixed or
+				improved without you doing anything else</span>. Being able to understand and write code using such abstractions is highly valued when writing large software projects.</p>
 			<p>In this page:</p>
 			<ul>
+				<li><a href="code-snippets">A quick note</a>
+				<li><a href="basics">Function basics</a></li>
+				<li><a href="void"><code>void</code> functions</a>
+				<li><a href="passing">Passing values</a></li>
+				<li><a href="constness"><code>const</code>ness</a></li>
+				<li><a href="best-practices">Best practices</a></li>
 			</ul>
+			<h3 id="code-snippets">A quick note</h3>
+			<p>Thus far, almost all of the example code that you have seen has been complete -- it has all the appropriate <code>#include</code> statements, has <code>using namespace std</code> at the top,
+				defines a function <code>main</code> and has <code>return 0</code> at the end. As we learn more programming constructs, writing out the full program will become excessively long at points,
+				so instead, many of the code snippets here will be fragments of the full source, which demonstrate only the code we're discussing.
+				There will still be full-length example programs where they are necessary to demonstrate a concept,
+				but it is expected that you will be able to understand where the example code belongs in the overall source file.</p>
+			<h3 id="basics">Function basics</h3>
+			<p>As it turns out, you have already seen what a function looks like:</p>
+			<pre class="brush: cpp">
+int main () {
+	//some code...
+	
+	return 0;
+}</pre>
+			<p><code>main</code> is an example of a function. Let's examine a little more closely what all of this means:</p>
+			<pre class="brush: cpp">int main ()</pre>
+			<p>Here, we are defining a function called <code>main</code> that outputs (returns) an <code>int</code> and takes no input parameters (the empty parentheses).
+				This description is known as a function's <span class="italic">signature</span>, or the aspects of a function that uniquely identify it:  name, return type, and parameters.
+				The reason that we always define this function is because it is your program's <span class="italic">entry point</span> -- the operating system starts your program by calling
+				its <code>main</code> function.</p>
+			<p>OK, let's look at the other function-related line in the code:</p>
+			<pre class="brush: cpp">return 0;</pre>
+			<p>This is <code>main</code>'s <span class="italic">return statement</span>, which is how <code>main</code> tells the computer what its "output" is
+				(or, using math terms, what <code>main</code> "evaluates to"). The <code>0</code> is the <code>main</code>'s <span class="italic">return value</span>, which is the value
+				that <code>main</code> will evaluate to. The type of a function's return value must <span class="underline">always</span> match its return type (in this case, <code>int</code>, as in <code>int main</code>), otherwise it will
+				not compile (this is under the same principle that you cannot store values of a differing data type in a variable).</p>
+			<p>Functions neither need to have the <code>int</code> return type, nor return the value <code>0</code>
+				(0 is actually just a <a href="http://tldp.org/LDP/abs/html/exitcodes.html" target="_blank">message to the operating system</a> to tell it if the program had any execution errors). You can return any
+				data type, such as <code>double</code>, <code>bool</code>, <code>string</code>, or even one of your own, when we learn abstract data types.</p>
+			<p>Generally speaking, a function looks like this:</p>
+			<pre class="brush: cpp">
+returnType functionName (inputParameterList) {
+	//code
+	return value;
+}</pre>
+			<p>Let's expand the idea of a function just by starting with a regular algebra function: f(x) = x<sup>2</sup>. Let's implement this as a function in C++:</p>
+			<pre class="brush: cpp">
+double f (double x) {
+	return x * x;
+}</pre>
+			<p>Now, we've changed some things from before: instead of returning an <code>int</code>, we now return a <code>double</code>; and instead of taking no parameters,
+				we now have one: <code>x</code>, which is a <code>double</code>. Inside the function, <code>x</code> is just a regular variable with type <code>double</code>, and we can use it
+				just like we would any other variable. Note that we did not have to declare it in the function body -- because we gave the variable a type and a name in the parameter list,
+				the compiler knows all it needs to make a regular variable from that alone.</p>
+			<p class="italic">For those wondering: We wrote <code>x * x</code> because <code>^</code> is <span class="underline">not</span> exponentiation in C++
+				(<a href="http://www.cplusplus.com/doc/tutorial/operators/#bitwise" target="_blank">it's actually bitwise XOR</a>). There is a function in the <code>cmath</code>
+				header file (<code>#include &lt;cmath&gt;</code>) called <a href="http://www.cplusplus.com/reference/cmath/pow/" target="_blank"><code>pow</code></a>
+				that computes arbitrary powers, but it is actually faster in terms of runtime to just multiply a number by itself than it is to call <code>pow(x, 2)</code>.</p>
+			<p>So, now we have written a function for f, but how do we use it? Let's go back to our <code>main</code>:</p>
+			<pre class="brush: cpp">
+int main () {
+	double a;
+	
+	cout &lt;&lt; "Please input a number: ";
+	cin >> a;
+	
+	cout &lt;&lt; a &lt;&lt; "^2 = " &lt;&lt; f(a) &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="output">Please input a number: <span class="input">5</span><br/>5^2 = 25</p>
+			<p>This is called a <span class="italic">function call</span>. A function call is exactly like you would expect -- the name of the function, followed by the inputs you are passing to it in parentheses.
+				When execution reaches this point, the program calls that function with its input <code>x</code> set to the value of <code>a</code>; <code>f</code> then executes its body until its return statement
+				is reached. When <code>f</code> returns, control returns to <code>main</code>, where the function call evaluates to the return value of <code>f</code> (in this case, 25). <code>cout</code> sees the
+				value <code>25</code>, and thus prints <code>25</code> to the screen.</p>
+			<p>Now, let's do a little more with functions, something more akin to what you might do in a program:</p>
+			<pre class="brush: cpp">
+string guessMyNumber (int a, int b) {
+	string msg;
+	int sum = a + b;
+	
+	if (sum >= 52 || sum &lt= 32)
+		msg = "That is very far from my number.";
+	else
+		msg = "That is close to my number!";
+		
+	return msg;
+}
+
+int main () {
+	int num1, num2;
+	string result;
+	
+	cout &lt;&lt; "Input two integers to be summed: ";
+	cin >> num1 >> num2;
+	
+	result = guessMyNumber(num1, num2);
+	
+	cout &lt;&lt; result &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">Input two integers to be summed: <span class="input">648 8964</span><br/>That is very far from my number.</p>
+			<p>Note that we now have multiple input parameters -- we separate these by inserting a comma between each parameter. When you call a function with multiple parameters,
+				order matters -- so, in this example, <code>num1</code> is passed to <code>guessMyNumber</code> as <code>a</code>, and <code>num2</code> is passed as <code>b</code>.
+				If we instead wrote <code>guessMyNumber(num2, num1)</code>, then <code>a</code> would have the same value as <code>num2</code>, and <code>b</code> would have the same
+				value as <code>num1</code>. If we only called <code>guessMyNumber</code> with one input (say, <code>guessMyNumber(num1)</code>), then the compiler would error out when
+				you try to compile, as <code>guessMyNumber</code> expects two inputs. The same thing would happen if you called it with three or more inputs.</p>
+			<p>Just like we do in <code>main</code>, we can use any lanuage constructs we have learned so far -- variables, <code>if-else</code> statements, loops -- in other functions as well.
+				Here, we return a string that indicates whether the user input two numbers that sum close to 42.</p>
+			<p>Note that, just because <code>guessMyNumber</code> is defined before <code>main</code>, <code>main</code> still executes first (recall that <code>main</code> is the entry point for your program).
+				The program will ask the user for two integers, then passes them to <code>guessMyNumber</code>, which sums the integers and uses the result and stores a message in a string named <code>msg</code>,
+				which is then returned back to <code>main</code>. <code>main</code> then stores the message in a variable named <code>result</code>, which is subsequently printed to the screen.</p>
+				
+			<h4 id="prototyping">Prototyping</h4>
+			<p>In the last example above, you may have noticed that <code>guessMyNumber</code> was defined before <code>main</code>. Why is that?</p>
+			<p>C++ compilers are only required to know about things that exist in the source before any particular line. You <span class="italic">could</span>
+				define <code>guessMyNumber</code> after <code>main</code>, except it may not compile -- the compiler might think that <code>guessMyNumber</code> doesn't exist
+				because it simply hasn't reached it yet.</p>
+			<p>That said, we usually want to make <code>main</code> the first actual code in our file, since this is where execution begins, and we don't want to go digging for
+				<code>main</code> in a file full of functions. How do we fix this problem?</p>
+			<p>The answer: you <span class="italic">prototype</span> your functions. Prototyping basically tells the compiler that a function with a particular signature does exist, but it does
+				not actually define the function (that is done later). Let's rewrite the above example, but with a function prototype:</p>
+			<pre class="brush: cpp; highlight: [2]">
+//This is the prototype
+string guessMyNumber (int a, int b);
+
+int main () {
+	int num1, num2;
+	string result;
+	
+	cout &lt;&lt; "Input two integers to be summed: ";
+	cin >> num1 >> num2;
+	
+	result = guessMyNumber(num1, num2);
+	
+	cout &lt;&lt; result &lt;&lt; endl;
+	return 0;
+}
+
+//This is the definition
+string guessMyNumber (int a, int b) {
+	string msg;
+	int sum = a + b;
+	
+	if (sum >= 52 || sum &lt= 32)
+		msg = "That is very far from my number.";
+	else
+		msg = "That is close to my number!";
+		
+	return msg;
+}</pre>
+			<p>Now, you'll notice that the prototype and the first line of the function definition are almost identical
+				-- they both have the same format, listing the function's return type, name, and parameters, except the
+				prototype ends with a semicolon (instead of an opening curly brace).
+				This has allowed us to move the definition of <code>guessMyNumber</code> after <code>main</code>.</p>
+			<p>You can prototype and define any number of functions in the same file; it is recommended that you use the following format when writing source code with functions:</p>
+			<pre class="brush: cpp">
+//any #includes here
+using namespace std; //if necessary
+
+//All of your function prototypes go here. Do not prototype main.
+
+int main () {
+	//code...
+	
+	return 0;
+}
+
+//All of the prototyped functions are defined here.</pre>
+			<p class="italic">Why not prototype <code>main</code>? The entire purpose of prototyping was to make <code>main</code> the first function that is defined in the source file.
+				You could prototype <code>main</code>, but it's pointless -- <code>main</code> is defined before anything else, so there is no dependency issue here.</p>
+			
+			<h4 id="basics-activity">Activity</h4>
+			<p>Write the following programs with one or more function(s). Be sure to prototype any functions other than <code>main</code> that you write.</p>
+			<ul>
+				<li>
+			</ul>
+			<h3 id="void"><code>void</code> functions</h3>
+			<h3 id="passing">Passing values</h3>
+			<h3 id="constness"><code>const</code>ness</h3>
+			<h3 id="best-practices">Best practices</h3>
           </div>
         </div>
        </main>
