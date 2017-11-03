@@ -24,6 +24,19 @@
     <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
     <script type="text/javascript" src="syntax/script/shCore.js"></script>
     <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+    <style>
+    .spoiler {
+    	background-color: #e0e0e0;
+    	text-align: center;
+    }
+    .spoiler > .contents,
+    .spoiler:hover > .banner {
+    	display: none;
+    }
+    .spoiler:hover > .contents {
+    	display: inline;
+    }
+    </style>
 </head>
 <body class="mdl-base">
 	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
@@ -56,17 +69,17 @@
 			<p>In programming, we typically use functions to avoid writing repetitive code, as well as to organize our code. If we find ourselves writing the same code (or very similar code) several times
 				over and over again, we begin setting ourselves up for failure: if one of those instances of that code fails, we have to spend lots of time trying to find it and debug it; if
 				<span class="italic">all</span> of the instances fail, we have to spend time debugging and fixing <span class="italic">every single one of them</span>, and it can be hard to distinguish
-				one instance from another. Functions provide a handy interface for us to <span class="italic">abstract</span> code like this and use it quickly elsewhere in the code, without much hassle.
-				The added benefit is if the function is wrong, or needs to be improved, and you fix or improve that function, <span class="underline">all other code that uses that function is fixed or
-				improved without you doing anything else</span>. Being able to understand and write code using such abstractions is highly valued when writing large software projects.</p>
+				one instance from another. Functions are <span class="italic">abstractions</span>, or programming language structures that allow us to wrap code in a common interface, allowing quick reuse of existing code.
+				As such, when you use a function to implement repetitive code, and you find that the function is wrong, or needs to be improved, and you fix or improve that function,
+				after which <span class="underline">all other code that uses that function will be fixed or improved without you doing anything else</span>.
+				Being able to understand and write code using such abstractions is highly valued when writing large software projects.</p>
 			<p>In this page:</p>
 			<ul>
-				<li><a href="code-snippets">A quick note</a>
-				<li><a href="basics">Function basics</a></li>
-				<li><a href="void"><code>void</code> functions</a>
-				<li><a href="passing">Passing values</a></li>
-				<li><a href="constness"><code>const</code>ness</a></li>
-				<li><a href="best-practices">Best practices</a></li>
+				<li><a href="#code-snippets">A quick note</a>
+				<li><a href="#basics">Function basics</a></li>
+				<li><a href="#void"><code>void</code> functions</a>
+				<li><a href="#passing">Passing values</a></li>
+				<li><a href="#constness"><code>const</code>ness</a></li>
 			</ul>
 			<h3 id="code-snippets">A quick note</h3>
 			<p>Thus far, almost all of the example code that you have seen has been complete -- it has all the appropriate <code>#include</code> statements, has <code>using namespace std</code> at the top,
@@ -170,6 +183,32 @@ int main () {
 			<p>Note that, just because <code>guessMyNumber</code> is defined before <code>main</code>, <code>main</code> still executes first (recall that <code>main</code> is the entry point for your program).
 				The program will ask the user for two integers, then passes them to <code>guessMyNumber</code>, which sums the integers and uses the result and stores a message in a string named <code>msg</code>,
 				which is then returned back to <code>main</code>. <code>main</code> then stores the message in a variable named <code>result</code>, which is subsequently printed to the screen.</p>
+			<p>So far, all of the functions we have seen so far have a <code>return</code> statement as the last statement in the function body. However, this isn't a requirement -- a
+				<code>return</code> can appear anywhere in the function body, so long as the following requirements are met:</p>
+			<ul>
+				<li>A <code>return</code> statement is <span class="underline">always</span> executed</li>
+				<li>All <code>return</code> statements in your code return variables or values that are appropriate for the return type.</li>  
+			</ul>
+			<p>As such, in order to meet these requirements (namely the first), if you have a <code>return</code> statement in the middle of your function body, you are going to need multiple return statements
+				in your source. This pattern is often used to detect invalid inputs and quit the function early and gracefully before the function does anything with those inputs. Let's see an example:</p>
+			<pre class="brush: cpp; highlight: [5, 14]">
+/* Converts a lowercase letter to uppercase.
+   This function is implemented in the standard &lt;cctype&gt; header */
+char toUpper (char letter) {
+	//If the letter is not lowercase, then just return the input
+	if (!(letter >= 'a' && letter &lt;= 'z')) return letter;
+	
+	/* ASCII -- how computers represent letters -- gives lowercase letters a
+	   higher value than lowercase, so we need to subtract the difference
+	   between the two. You can see the mapping here:
+	   https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
+	   Internally, C++ treats all characters just as regular numbers
+	   (mapped according to the table above), so we can use math to figure out
+	   the right difference. */
+	return letter - ('a' - 'A');
+}</pre>
+			<p>Now, note that if <code>letter</code> is not a lowercase letter, this function will simply return the input letter, but more importantly,
+				it will <span class="bold">not</span> execute the second return statement on line 14 -- control will return to the calling function, which will resume execution.</p>
 				
 			<h4 id="prototyping">Prototyping</h4>
 			<p>In the last example above, you may have noticed that <code>guessMyNumber</code> was defined before <code>main</code>. Why is that?</p>
@@ -233,12 +272,236 @@ int main () {
 			<h4 id="basics-activity">Activity</h4>
 			<p>Write the following programs with one or more function(s). Be sure to prototype any functions other than <code>main</code> that you write.</p>
 			<ul>
-				<li>
+				<li>Ask the user for a <code>double</code> input <code>x</code>, and output the result of the following piecewise function:
+					<ul>
+						<li>If <code>x &lt; 0</code>, f(x) = 0</li>
+						<li>If <code>x >= 0 && x &lt; 5</code>, f(x) = 2x</li>
+						<li>If <code>x >= 5 && x &lt; 10</code>, f(x) = -x<sup>2</sup> + 10x - 15</li>
+						<li>If <code>x >= 10</code>, f(x) = 0</li>
+					</ul>
+				</li>
+				<li><span class="italic">Pythagorean theroem</span>: Ask the user for two <code>double</code>s, and output the length of the hypotenuse of the right triangle formed by using those inputs as leg lengths.
+					<ul>
+						<li>The Pythagorean theorem states that a right triangle with leg lengths <span class="italic">a, b</span> and hypotenuse length <span class="italic">c</span> is represented by the equation
+							a<sup>2</sup> + b<sup>2</sup> = c<sup>2</sup>.</li>
+						<li>To compute a square root, put <code>#include &lt;cmath&gt;</code> at the top of your source file and use the
+							<a href="http://www.cplusplus.com/reference/cmath/sqrt" target="_blank"><code>sqrt()</code></a> function.</li>
+					</ul>
+				</li>
 			</ul>
 			<h3 id="void"><code>void</code> functions</h3>
+			<p>So, we have seen that we can write functions to abstract code and return some value that the code is designed to produce.
+				But what if we just want to abstract away code for the sake of having the abstraction, not caring about the return value at all? Enter the <code>void</code> function.</p>
+				
+			<pre class="brush: cpp">
+void printName (string name) {
+	cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; '!' &lt;&lt; endl;
+}
+</pre>
+			<p>In the above example, you can see two things that are different from before:</p>
+			<ul>
+				<li>The return type is <code>void</code>.</li>
+				<li>There is no return statement.</li>
+			</ul>
+			<p>The change in the return type should come as no surprise, but what about the <code>return</code> statement? Well, because we don't need to return anything, we can omit it;
+				the compiler assumes that the function will stop executing when it reaches the end of the function body. In a sense, void functions still "return" to their caller
+				(the function that called them), but they do not evaluate to any particular value after being called.</p>
+			<p>Because <code>void</code> functions don't return anything, none of the following calls to <code>printName</code> would work:</p>
+			<pre class="brush: cpp">
+string myName = "John Doe"
+int a = printName(myName);	//assigning nothing into an int!
+cout &lt;&lt; printName(myName) &lt;&lt; endl;	//printing out nothing!</pre>
+			
+			<p>But what if we wanted to have an early return? Like we saw with <code>toUpper</code>, we might have some input (or combination of inputs) that are "invalid" that still prevent
+				the <code>void</code> function from executing properly; so we will want to stop its execution early. As it turns out, just because the function is <code>void</code> does not mean
+				that it can't have a <code>return</code> statement; rather, the <code>return</code> statement can't have a return value. So, you might have a function that looks like this:</p>
+			<pre class="brush: cpp; highlight: [7]">
+/* **NOTE**: Ideally, this function should return the average, after which the
+             caller would print it, but for the sake of example we are printing
+             the average here */
+//Take a sum and a count and print the average
+void printAvg (double sum, int n) {
+	//Can't divide by 0! So just exit
+	if (n == 0) return;
+	
+	cout &lt;&lt; "Average: " &lt;&lt; (sum/n) &lt;&lt; endl;
+}</pre>
+			<h4 id="void-activity">Activity</h4>
+			<p>Ask the user for an <code>int</code>, and output the following triangle:</p>
+			<p class="output">#<br/>##<br/>###<br/>####<br/>...<br/>######</p>
+			<p>where the triangle's height and the length of the last line are both the number that the user input.
+				Be sure to write a <code>void</code> function that prints this triangle for a given integer input.</p>
 			<h3 id="passing">Passing values</h3>
+			<p>So, we have been able to create and call functions using inputs, but how exactly are those inputs passed to the function?
+				Or, we could reframe it as such: what happens if we were to change the parameters in a function? Would we see the change in the caller?</p>
+			<p>Let's find out:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void doSomething (int a);
+
+int main () {
+	int x = 5;
+	
+	doSomething(x);
+	
+	cout &lt;&lt; x &lt;&lt; endl;
+	
+	return 0;
+}
+
+void doSomething (int a) {
+	a = 10;
+}</pre>
+			<p class="output">5</p>
+			<p>So, changing the value of the input (<code>a</code>) inside of <code>doSomething</code> had no effect on the value of <code>x</code> in <code>main</code>.
+				This is because function parameters are <span class="italic">passed by value</span>, in other words, the computer copies the value of the input parameter to a new variable in
+				the new function, which then operates on that copy, instead of the original. So, in the above example, you could change <code>a</code> any number of times in any
+				number of ways, but <code>x</code> in <code>main</code> will still be <code>5</code> when <code>doSomething</code> returns.</p>
+			<p>But what if we wanted to change <code>x</code> from <code>doSomething</code>? To do this, we tell the compiler to <span class="italic">pass by reference</span>; or, instead
+				of copying the value of the variable into a new variable, simply make a new name for the original variable and use that in the function. Let's change our example so it
+				passes by reference:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+//Notice the change both here and in the function definition
+void doSomething (int &a);
+
+int main () {
+	int x = 5;
+	
+	doSomething(x);
+	
+	cout &lt;&lt; x &lt;&lt; endl;
+	
+	return 0;
+}
+
+void doSomething (int &a) {
+	a = 10;
+}</pre>
+			<p class="output">10</p>
+			<p>The change is subtle: we added a <code>&</code> before the variable name in the parameter list in both the function prototype and the function definition.
+				Note that the reference does <span class="italic">not</span> have the same name as the original variable.</p>
+			<p>Now, we see that making the change to <code>a</code> in <code>doSomething</code> affects the variable <code>x</code> in <code>main</code>.
+				This is called a <span class="italic">side effect</span>.</p> 
 			<h3 id="constness"><code>const</code>ness</h3>
-			<h3 id="best-practices">Best practices</h3>
+			<p>Let's take a brief break from functions and talk about variables (keep passing by reference fresh in your mind, though, we will need it shortly).
+				Up until now, your variable declarations have been pretty simple and straightforward:</p>
+			<pre class="brush: cpp">int x;
+string myStr;</pre>
+			<p>The above code snippet creates two variables that you can assign a value to, read from, and reassign as much as you would like.
+				However, there may be a time when you <span class="italic">don't</span> want your variables to change -- you still want them to hold a value, but that value
+				should never change. As it turns out, there are a lot of modifiers that you can tack on to your variable declarations that modify the behavior of those variables.
+				One such modifier, <code>const</code>, tells the compiler that <span class="bold">the value of the variable should never change once set</span>:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	const int MY_NUM = 42;
+	int i;
+	
+	cout &lt;&lt; "Please input a number: ";
+	cin >> i;
+	
+	cout &lt;&lt; MY_NUM + i &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="output">Please input a number: <span class="input">7</span><br/>49</p>
+			<p>So far, nothing out of the ordinary. Let's try modifying <code>MY_NUM</code>:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+int main () {
+	const int MY_NUM = 42;
+	int i;
+	
+	cout &lt;&lt; "Please input a number: ";
+	cin >> i;
+	
+	++MY_NUM;	//attempting to modify MY_NUM
+	
+	cout &lt;&lt; MY_NUM + i &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="compiler">const.cpp:11:4: error: increment of read-only variable `MY_NUM'</p>
+			<p>As you can see, the compiler now errors out when we try to modify <code>MY_NUM</code>.</p>
+			<p>Why would we want to keep ourselves from modifying a variable? Well, the general answer to this question is that there are lots of cases
+				where we do <span class="italic">not</span> want to modify a variable -- most especially when dealing with functions. It is very easy to
+				modify a variable -- even if by accident. Adding <code>const</code> to a variable makes the compiler enforce this restriction for us, to
+				ensure that no modification takes place.</p>
+			<p>When would this be the case? Let's see.</p>
+			<h4 id="const-ref"><code>string</code> is hiding a secret</h4>
+			<p>For the sake of argument, let's make our own print function. It will just use <code>cout</code> internally, but it will take a single string as an input.
+				I give you the following two implementations of the print function:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+using namespace std;
+
+void printValue (string str);
+void printRef (string &str);
+
+int main () {
+	string myStr;
+	
+	cout &lt;&lt; "Input a string: ";
+	cin >> myStr;
+	
+	/* We comment one call out so only one print function is called, but
+	   we can quickly switch between the two when needed */
+	for (int i = 0; i &lt; (1 &lt;&lt; 20); ++i) {	//1 &lt;&lt; 20 == 2^20
+		printValue(myStr);
+		//printRef(myStr);
+	}
+	
+	return 0;
+}
+
+void printValue (string str) {
+	cout &lt;&lt; str &lt;&lt; endl;
+}
+
+void printRef (string &str) {
+	cout &lt;&lt; str &lt;&lt; endl;
+}</pre>
+			<p>Ostensibly, both functions do the same thing: they print the print the string that is passed to the function, followed by a newline, and then return.
+				The only difference is that <code>printValue</code> takes <code>str</code> by value, and <code>printRef</code> takes a value by reference.
+				Note how the <code>for</code> loop calls each function 1000 times.</p>
+			<p>I have generated a massive input for <code>myStr</code> -- 32768 (2<sup>15</sup>) characters. We will perform the following experiment: run this program as shown above with
+				the massive input and record how long it took, then we will comment out line 15 and uncomment line 16
+				-- so we now call <code>printRef</code> instead of <code>printValue</code> -- and then run the program on the exact same input and record the time.
+				What do you think will happen?</p>
+			<p class="spoiler">
+				<span class="banner">Think about it first, then roll over to see result</span>
+				<span class="contents"><code>printValue</code> took 2.154 seconds; <code>printRef</code> took 0.511 seconds</span>
+			</p>
+			<p>Why such a big difference? Well, the problem lies with how <code>string</code> is implemented under the hood. A <code>string</code> is implemented as a container arround a
+				sequence of characters (we will discuss this sequence in more depth when we discuss arrays). While a single <code>char</code> is quite small (in fact, it is tied for the smallest
+				data type in C++, the other being <code>bool</code>), a very long sequence of them can be quite large (in this specific case, 33 kilobytes). Because we passed by value and not reference,
+				we were copying those 33 kilobytes to the new function -- <span class="italic">2<sup>20</sup> times</span>. However, when we passed by reference, we weren't making any copies of the string --
+				instead, we just made new names for the same variable; so, the computer had to do much less work here.</p>
+			<p>We wouldn't notice this behavior with any of the other data types we have seen thus far -- the numeric data types all have fixed size, and the largest of which (<code>double</code>) is still only
+				8 bytes, which can be copied by a computer relatively quickly. <code>string</code>s, on the other hand, grow with the size of their contents, and tend to be large by default, so the performance
+				hit for copying a <code>string</code> is much greater.</p>
+			<p>But remember -- <span class="italic">references allow us to modify the original variable</span>. But <code>printRef</code> isn't supposed to do this -- all it should do is print the value, not modify it.
+				This is where <code>const</code> comes into play. We can use <code>const</code> in combination with the reference to tell the compiler that we want to pass by reference,
+				<span class="italic">but not modify</span> the variable:</p>
+			<pre class="brush: cpp">
+void printRef (const string &str) {
+	cout &lt;&lt; str &lt;&lt; endl;
+}</pre>
+			<p>Now, if we tried to make any modifications to <code>str</code> in the code, the compiler would tell us.
+				Now we have the benefits of passing by reference with the guarantee that <code>str</code> will not be modified.</p>
+			<p>Generally speaking, you use this pattern when dealing with large data types (we will see more of these when we discuss abstract data types), but not with small data types.
+				The reason for this is because the computer still has to perform a copy under the hood (the amount of data copied is 4 bytes on a 32-bit system and 8 bytes on a 64-bit system)
+				to support the reference, and simply copying small data such as an <code>int</code> or a <code>double</code> has the same (or better) performance. However, if you do need a function
+				to modify the original input variables, then you should pass by (non-<code>const</code>) reference.
           </div>
         </div>
        </main>
