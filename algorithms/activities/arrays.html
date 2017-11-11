@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Arrays &#8212; IA Algorithms Enrichment 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+    <style>
+    .spoiler {
+    	background-color: #e0e0e0;
+    	text-align: center;
+    }
+    .spoiler > .contents,
+    .spoiler:hover > .banner {
+    	display: none;
+    }
+    .spoiler:hover > .contents {
+    	display: inline;
+    }
+    </style>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              <a href="../index.html#activities">Activities</a> &gt; Nov 11 &gt; Arrays
+            </div>
+            <h2>Arrays</h2>
+			<p>In all of the algorithm demos so far, we have looked at algorithms that deal with lists of things -- usually numbers, but they
+				can be applied to lists of different data types as well -- however, until now, we have been unable to actually store such a
+				list in our programs -- we have only been able to declare individual variables that store one piece of data. We could simply
+				declare a bunch of variables and give them all different names, but this is a pain to set up and keep track of.</p>
+			<p>This is where <span class="italic">arrays</span> come in. Arrays are special variables that hold a sequence of variables under
+				one variable name. You can make an array of any valid data type.</p>
+			
+			<p>In this page:</p>
+			<ul>
+				<li><a href="#basics">Array concepts</a></li>
+				<li><a href="#code">Creating and using an array</a></li>
+				<li><a href="#vector"><code>vector</code>: the resizable array</a></li>
+			</ul>
+			
+			<h3 id="basics">Array concepts</h3>
+			<p>In order to understand how an array works, let's first look at how arrays are stored in the computer's memory (RAM).
+				You can think of computer memory as a long row of boxes, each with its own unique <span class="italic">address</span>.
+				You can use that address to pull data out of those boxes.</p>
+			<p>Suppose we have the following variable declarations:</p>
+			<pre class="brush: cpp">int a;
+double b;
+char c;
+string d;</pre>
+			<p>In memory, these variables are stored something like this:</p>
+			<img src="img/memory-layout0.png" alt="Example memory layout"/>
+			<p>As you can see, each variable is laid out in memory in the order it was declared, starting at an arbitrary address (<code>100</code> in this case).
+				If we were to declare more variables, they would be added starting at address <code>104</code> (in this example), or before address <code>100</code>
+				if we declared them before <code>a</code>.</p>
+			<p>Now, if we wanted to store a list or array of items, ideally, we would just make one variable refer to multiple boxes in memory. And, in fact, this is
+				basically how arrays work under the hood:</p>
+			<img src="img/memory-layout1.png" alt="Example array memory layout"/>
+			<p>Above, we have an array variable named <code>a</code> that consists of four "boxes" in memory, at addresses <code>100</code>, <code>101</code>,
+				<code>102</code>, and <code>103</code>. Each of these boxes stores an <code>int</code> independently of the others.</p>
+			<p>But how do we refer to each of these <code>int</code>s? Before, we just used the name of the variable to retrieve its value, but since one variable now refers
+				to four distinct values, this will no longer work. So, in addition to using the varaible name, we also have to specify the value's <span class="italic">index</span>,
+				or position in the array:</p>
+			<img src="img/memory-layout2.png" alt="Array index example"/>
+			<p>Here, the index is the <span class="underline">offset from the first element in the array</span>.
+				<span class="bold">Note how this makes the index of the first element of the array <code>0</code>.</span>
+				Be sure to remember this; it is a common mistake for beginners to start indexing an array from <code>1</code>.</p>
+			<p>So, the general idea is this: We need to create an array variable with a preset size (in this example, <code>4</code>),
+				initialize it (if necessary), and then use it by indexing into the array.</p>
+			
+			<h3 id="code">Creating and using an array</h3>
+			<p>Let's see how to do this in code:</p>
+			<pre class="brush: cpp">
+//declare a 4-element array
+int a [4];
+
+//initialize the first two ints
+a[0] = 1;
+a[1] = 1;
+
+//Do some math with our array
+a[2] = a[1] + a[0];
+a[3] = a[2] + a[1];
+
+cout &lt;&lt; "First four numbers of the Fibonacci sequence:" &lt;&lt; endl;
+cout &lt;&lt; a[0] &lt;&lt; endl;
+cout &lt;&lt; a[1] &lt;&lt; endl;
+cout &lt;&lt; a[2] &lt;&lt; endl;
+cout &lt;&lt; a[3] &lt;&lt; endl;</pre>
+			<p class="output">First four numbers of the Fibonacci sequence:<br/>1<br/>1<br/>2<br/>3</p>
+			<p>This is fairly straightforward -- it stores <code>1</code> into the first two elements, and then computes the next two Fibonacci numbers.</p>
+			<p>One thing to note here is the initial declaration is the size argument -- we told the compiler to make an <code>int</code> array of size 4,
+				although the highest index is <code>3</code> for this array -- this is because the array declaration expects the total size of the array, not
+				the highest index. Another thing to note here is that <span class="underline">the size argument must be computable at compile time</span>.
+				In other words, we cannot use a variable to set this size -- <span class="underline">it must be a literal integer value</span>.</p>
+			<p>However, what if we wanted to do this with the first twenty numbers of the Fibonacci sequence,
+				instead of the first four? Doing it this way would be very time consuming and it would make the source look bloated.
+				Unlike the size argument in the declaration, however, we <span class="italic">can</span> use a variable to index into an array
+				that has already been created. We can use this fact in tandem with a <code>for</code> loop to visit each index in the array, in order:</p>
+			<pre class="brush: cpp">
+//declare a 20-element array
+int fib [20];
+
+//Initialize the first two elements
+a[0] = 1;
+a[1] = 1;
+
+/* Iterate and calculate the Fibonacci sequence through 20
+   We start at 2 since we have hard-coded values for indices 0 and 1 */
+for (int i = 2; i &lt; 20; ++i)
+	a[i] = a[i - 1] + a[i - 2];
+
+cout &lt;&lt; "Fibonacci sequence through the 20th number:" &lt;&lt; endl;
+
+//We use the same tactic as above, but starting from 0 so as to iterate through the whole array
+for (int i = 0; i &lt; 20; ++i)
+	cout &lt;&lt; a[i] &lt;&lt; endl;</pre>
+	
+			<p class="output">Fibonacci sequence through the 20th number:<br/>
+				1<br/>1<br/>2<br/>3<br/>5<br/>8<br/>13<br/>21<br/>34<br/>55<br/>
+				89<br/>144<br/>233<br/>377<br/>610<br/>987<br/>1597<br/>2584<br/>4181<br/>6765</p>
+				
+			<p>As you can see above, we set the <code>for</code> loop's control variable such that on each iteration, 
+				we use it as the index for the array. We can also use addition and subtraction to get nearby elements
+				in the array.</p>
+			
+			<h4 id="range-for">range-<code>for</code></h4>
+			<p>C++11 introduced another way of looping through an array called the <span class="italic">range-<code>for</code> loop</span>.
+				Instead of creating a control variable and indexing into the array by hand, you simply tell the compiler that you want
+				to iterate over every element in the array; the "control variable" in a range-for loop becomes the element in the array
+				at a particular index. Here's how you use it:</p>
+			<pre class="brush: cpp">
+//declare a 20-element array
+int fib [20];
+
+//Initialize the first two elements
+a[0] = 1;
+a[1] = 1;
+
+//Note that we cannot change this loop to be a range-for loop
+for (int i = 2; i &lt; 20; ++i)
+	a[i] = a[i - 1] + a[i - 2];
+
+cout &lt;&lt; "Fibonacci sequence through the 20th number:" &lt;&lt; endl;
+
+//Here's the range-for loop:
+for (int val : a)
+	cout &lt;&lt; val &lt;&lt; endl;</pre>
+			<p>This syntax reads as <span class="bold">"for val in a, do ..."</span>.
+				Effectively, the compiler will visit every element of <code>a</code> in order
+				and copy that value to <code>val</code> for a single loop iteration.</p>
+			<p>Note how we couldn't change the first <code>for</code> loop to be a range-<code>for</code> loop, because it starts
+				in the middle of the array, rather than the beginning. When using the range-<code>for</code> syntax, the compiler
+				assumes that you are iterating through the whole array. Another thing you must consider when writing a range-<code>for</code>
+				loop is that <code>val</code> is a copy -- <span class="italic">any changes you make to <code>val</code> will <span class="underline">not</span>
+				carry over to the corresponding value in the array</span>. If you do need this functionality, you can use something remarkably similar to
+				pass-by-reference:</p>
+			<pre class="brush: cpp">
+int nums [20];
+
+for (int &num : nums)
+	num = 0;
+	
+//Now, nums will be initialized with all 0s</pre>
+			<p>The concept is the same here: a range-<code>for</code> loop works much like a function call, so we get a reference to each array element if we want to modify it.
+				Otherwise, if the array is of a small data type, then we simply get each element by value; if the array is of a large data type, then we get a <code>const</code>
+				reference to each element.</p>
+				
+			<h4 id="bounds">Going out of bounds</h4>
+			<p>So far, we have seen well-formed examples of how to use arrays properly. But what if we (intentionally or unintentionally) use them improperly.
+				In other words, what happens when we index out of bounds?</p>
+			<pre class="brush: cpp">
+int nums [20];
+
+//NOTE! Index 20 is out of bounds, yet i will take on values in [0, 20]
+for (int i = 0; i &lt;= 20; ++i) {
+	nums[i] = i;
+	cout &lt;&lt; i &lt;&lt; endl;</pre>
+			<p class="output">0<br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>
+				10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/><span class="italic">???</span></p>
+			<p>Firstly, one curious thing: it compiles! The compiler doesn't notice that we're indexing out of the array's bounds
+				(in fact, we could explicitly use an out-of-bounds index and it would still compile).</p>
+			<p>But the big takeaway here is that we cannot predictably say what will happen when <code>i</code> reaches a value of <code>20</code>.
+				What happens here is called <span class="italic">undefined behavior</span>, which is fairly descriptive of what happens: basically anything.
+				Your program could crash, your computer could blue screen/panic, or, worst of all, <span class="italic">it could even get the right answer</span>.
+				We simply cannot say that any of those things will happen, only that they <span class="italic">might</span>.</p>
+			<p>The important thing to take away here is that the computer won't check that you are in bounds for you; you are going to have to make sure that your code
+				never goes out of bounds. The most common error is not setting up the <code>for</code> loop properly, typically by using the <code>&lt;=</code> operator
+				instead of <code>&lt;</code> in the loop condition. My advice here is to <span class="bold">always use the range-<code>for</code> loop syntax whenever possible</span>,
+				since this takes away the difficulty of figuring out the proper loop condition.</p>
+			
+			<h4 id="functions">Using arrays with functions</h4>
+			<p>So, we see that arrays are themselves variables, but we can't simply pass them to a function like we would any other variable. That is because arrays have a slightly
+				different data type: they are <span class="bold">array of <code>int</code>/<code>double</code>/etc.</span> as opposed to a regular <code>int</code>/
+				<code>double</code>/etc. When we declare an array, we specify the "array-of" type by providing the array length. However, we couldn't do this again in a function call,
+				because the array has already been allocated and been assigned a length!</p>
+			<p>Because of this, array parameters to a function have a slightly different syntax:</p>
+			<pre class="brush: cpp">
+void someFunction (int myArray[], ...)
+
+// ** OR **
+
+void someFunction (int *myArray, ...)</pre>
+			<p>Both of the above function signatures are identical. Note that the first form does <span class="bold">NOT</span> have a length argument between the square brackets
+				(or anything, for that matter). As mentioned before, it is infeasible for the compiler to guarantee that an array input to a function will always have a specified length;
+				so all functions that take an array as an argument are required to take arrays of arbitrary length.</p>
+			<p class="italic">Note: the second format shown above takes advantage of the fact that arrays often convert themselves into pointers to their first element. In truth, the first
+				format is interpreted by the compiler as the second format, so these two are truly identical. This is not a technicality that you need to worry about right now --
+				either way you choose, you can still use the array like you would in the function in which you declared it.</p>
+			<p>However, because we can't specify the length of the array as a part of the parameter itself, how do we know how long the array is? Especially considering that our function
+				must be able to handle an array of any possible length, this functionality is useless to us unless we can use the array properly. To avoid this, you should (almost)
+				<span class="italic">always</span> include another parameter that specifies the length:</p>
+			<pre class="brush: cpp">
+void someFunction (int *myArray, int size) {
+//...
+}</pre>
+			<p>By doing so, you require whoever is calling your function (it may not be you!) to provide a value for the size of the array, so your function will now
+				always know what the length of the array is. If someone passes a bad value for the size of the array, this is not something you need to worry about; it
+				is common to see libraries (especially the standard library) fall back to undefined behavior if the user provides an invalid input, so it is OK for you
+				to do the same.</p>
+			<p>There is one caveat, though: <span class="bold">range-<code>for</code> loops will not work on the array in this function.</span> This is because the C++ compiler
+				uses the underlying array type to determine how many iterations it has to make and write the loop control logic for you. When you pass an array to a function,
+				it actually gets converted to a <span class="italic">pointer</span> (which we will discuss later), which has no intrinsic length value, so the compiler no
+				longer knows how to write the range-<code>for</code> control logic.</p>
+			
+			<h4 id="native-array-activity">Activity</h4>
+			<p>Write a program that computes a modified version of the Fibonacci sequence, which is as follows:</p>
+			<p>m<sub>i</sub> = m<sub>i-1</sub> + m<sub>i-3</sub></p>
+			<p>In other words, each element in the sequence is the sum of the preceding element and the element 3 positions beforehand.</p>
+			
+			<h3 id="vector"><code>vector</code>: the resizeable array</h3>
+			<p></p>
+          </div>
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>
