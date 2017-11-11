@@ -254,11 +254,33 @@ void someFunction (int *myArray, int size) {
 			
 			<h4 id="native-array-activity">Activity</h4>
 			<p>Write a program that computes a modified version of the Fibonacci sequence, which is as follows:</p>
-			<p>m<sub>i</sub> = m<sub>i-1</sub> + m<sub>i-3</sub></p>
-			<p>In other words, each element in the sequence is the sum of the preceding element and the element 3 positions beforehand.</p>
+			<p>m<sub>i</sub> = m<sub>i-1</sub> + m<sub>i-3</sub>; m<sub>0</sub> = m<sub>1</sub> = m<sub>2</sub> = 1</p>
+			<p>In other words, each element in the sequence is the sum of the preceding element and the element 3 positions beforehand.
+				The first 3 numbers in the sequence are all 1.</p>
 			
 			<h3 id="vector"><code>vector</code>: the resizeable array</h3>
-			<p></p>
+			<p>The one unfortunate thing about C++ arrays is that they are of constant size: once you've declared them, you cannot change their size.
+				This puts a natural limit on their practicality: there are a lot of problems that you might be presented with that give you a list
+				of arbitrary length, and you need to be able to store these lists without being given the length ahead of time. How would we handle these?</p>
+			<p>The answer lies in an object provided by the C++ standard library: <code>vector</code>. A <code>vector</code> is essentially a resizeable array.
+				To use a vector, though, we will need to add an <code>include</code> statement at the top of our source file:</p>
+			<pre class="brush: cpp">#include &lt;vector&gt;</pre>
+			<p>As with <code>iostream</code>, you will need to have the <code>using namespace std;</code> statement after your <code>#include</code> directives.
+				Once you've included the <code>vector</code> header, you can declare a <code>vector</code> variable like so:</p>
+			<pre class="brush: cpp">
+#include &lt;vector&gt;
+using namespace std;
+
+int main () {
+	vector&lt;int&gt; myInts;
+	
+	//...
+	
+	return 0;
+}</pre>
+			<p>Note how the declaration syntax is quite different from that of a native array: our data type is <code>vector&lt;int&gt;</code>, and there is no initial size.
+				You can read this data type as "<code>vector</code> of <code>int</code>". <code>vector</code>s are much like <code>string</code>s in that they run some
+				initialization steps when they are first created. As declared above, the <code>vector</code> would create a list of length <code>0</code>.</p>
           </div>
         </div>
        </main>
