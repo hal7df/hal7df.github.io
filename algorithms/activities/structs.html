@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Structs &#8212; IA Algorithms Enrichment 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              <a href="../index.html#activities">Activities</a> &gt; Nov 18 &gt; Structs
+            </div>
+            <h2>Abstract data types, part 1: <code>struct</code>s</h2>
+			<p><span class="italic">Object-oriented programming</span> is, in essence, the one feature that C++ is known for, and the facilities
+				that C++ provides to that end are very powerful. Essentially, object-oriented programming allows you to group both data and code
+				into one unit in your code (an "object") at a high level. In fact, you have already encountered pre-built objects in your code --
+				<code>cin</code>, <code>cout</code>, <code>string</code>s, and <code>vector</code>s are all examples of objects built
+				using C++'s object-oriented programming paradigm. In this activity, we will explore some of the basic features that object-oriented
+				programming has to offer us, using a new language feature: a <code>struct</code>.</p>
+			<p><code>struct</code>s (and, later, <code>class</code>es) allow us to create our own data types.
+				First, we use them to define both the <code>behavior</code> and the <code>state</code> of our data types.
+				From there, we can instantiate these data types as variables ("objects") in our program, taking advantage of the fact that
+				these variables/objects can take care of their own state requirements by themselves, which allows us to write our code
+				in a much more conceptual manner.</p>
+			<p>In this lesson:</p>
+			<ul>
+				<li><a href="#data">Member data</a></li>
+				<li><a href="#functions">Member functions</a></li>
+				<li><a href="#constructors">Constructors</a></li>
+			</ul>
+			<h3 id="data">Member data</h3>
+			<p>As we proceed through this activity, we will be working to design a <code>struct</code> called <code>Student</code>,
+				which handles all of the records for one particular student in a class. This <code>struct</code> will have a lot of requirements, so
+				we're going to build <code>Student</code> incrementally.</p>
+			<p>Let's start by just looking at how to create a <code>struct</code>:</p>
+			<pre class="brush: cpp; highlight: [1,2,3,7]">
+struct Student {
+	//...
+};
+
+int main () {
+	//create two Student variables called 'alice' and 'bob' 
+	Student alice, bob;
+	
+	//...
+	return 0;
+}</pre>
+			<p>So far, we see that there are two places where we are dealing with <code>Student</code>: on lines 1 through 3 where we define the <code>struct</code>,
+				and then on line 7 where we declare two <code>Student</code> variables named <a href="https://en.wikipedia.org/wiki/Alice_and_bob" target="_blank"><code>alice</code> and <code>bob</code></a>.
+				After that, we would presumably interact with <code>alice</code> and <code>bob</code> to handle student records, but let's focus on the <code>struct</code> definition first.</p>
+			<p>First, note that the <code>struct</code> definition is <span class="italic">outside</span> the definition for <code>main</code>. While this isn't strictly necessary, doing so makes your
+				<code>struct</code> visible to all of the functions in your file, which is typically what you want.</p>
+			<p>The first thing we are going to want to do is add the data for our <code>Student</code>: likely their first and last name, their age, their grade level,
+				and their current score in the class (which we will measure as a decimal ranging from 0 to 100):</p>
+			<pre class="brush: cpp;">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+};</pre>
+			<p>This is fairly straightforward: for all of the data we want <code>Student</code> to retain, we simply declare a variable for each piece of data,
+				using the appropriate data type. These variables are called <span class="italic">member variables</span>, in that they are all members of the
+				<code>Student</code> <code>struct</code>.</p>
+			<p>Member variables are a little different from the variables you have interacted with so far, for a few reasons:</p>
+			<ul>
+				<li>The declarations in the <code>struct</code> definition <span class="italic">don't actually set aside any memory for those variables</span>.
+					The declarations are really just notes to the compiler that say "I will need these variables when the programmer wants to create an object of this type".</li>
+				<li><span class="underline">Member variables are unique to each instance of <code>Student</code></span>. In the example above, <span class="italic">both
+					<code>alice</code> and <code>bob</code> will have their own unique <code>firstName</code>, <code>lastName</code>, <code>age</code>, etc. member variables.</span>
+					Changing the member variables of <code>bob</code> will have no effect on the members of <code>alice</code>.</li>
+			</ul>
+			<p>It can easily be seen that the first point is a side effect of the second: because each member variable must be unique to each instantiation of the <code>struct</code>,
+				we cannot set aside any memory for them until a <code>Student</code> is declared.</p>
+			<p>So, we know how to tell the compiler what the member variables of a <code>struct</code> are, but how do we use them in our code? Well, we know that each member variable
+				is attached to a specific instance of <code>Student</code>, so let's try to do something with our <code>Student</code>s <code>alice</code> and <code>bob</code>:</p>
+			<pre class="brush: cpp">
+int main () {
+	Student alice, bob;
+	
+	alice.firstName = "Alice";
+	alice.lastName = "Zircon";
+	alice.age = 16;
+	alice.gradeLevel = 11;
+	alice.score = 98.4;
+	
+	bob.firstName = "Bob";
+	bob.lastName = "Ytterby";
+	bob.age = 14;
+	bob.gradeLevel = 9;
+	bob.score = 93.5;
+	
+	if (alice.score > 96.0) {
+		cout &lt;&lt; "Alice has an A+" &lt;&lt; endl;
+	} else {
+		cout &lt;&lt; "Alice does not have an A+" &lt;&lt; endl;
+	}
+	
+	cout &lt;&lt; "Bob is in " &lt;&lt; bob.gradeLevel &lt;&lt; "th grade" &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p>As we see above, we can access the member variables of <code>alice</code> and <code>bob</code> using the
+				<code>.</code> or <span class="italic">member-of</span> operator. We use the variable name for the object,
+				and then following the member-of operator, we type the name of the member variable we want to access.
+				From there, we can use the member variable just like we would use any other variable.</p>
+			<p class="italic">Note: You've seen the member-of operator before, with <code>vector</code>: <code>vec.size()</code>,
+				<code>vec.push_back()</code>, <code>vec.resize()</code>, etc.</p>
+			<h4 id="data-activity">Activity</h4>
+			<ul>
+				<li>Extend the <code>Student</code> <code>struct</code> to also store gender (a single <code>char</code> such as <code>M</code> or <code>F</code>)
+					and their street address (a <code>string</code>).</li>
+				<li>Write a program that gets all of the information in <code>Student</code> on 5 students, and then outputs each student's first and last name, their grade level,
+					and their letter grade. Use an array or a <code>vector</code> to store the students. Use the following scale to compute the letter grade:
+					<ul>
+						<li>93+: A</li>
+						<li>[90, 93): A-</li>
+						<li>[87, 90): B+</li>
+						<li>[83, 87): B</li>
+						<li>[80, 83): B-</li>
+						<li>[77, 80): C++</li>
+						<li>[73, 77): C</li>
+						<li>[70, 73): C-</li>
+						<li>[67, 70): D+</li>
+						<li>[63, 67): D</li>
+						<li>[60, 63): D-</li>
+						<li>[0, 60): E</li>
+					</ul>
+				</li> 
+			</ul>
+			<h3 id="functions">Member functions</h3>
+			<p>So, we've seen that we can use a <code>struct</code> to store abitrary, related data in one "varaible".
+				Our <code>Student</code> <code>struct</code> can tell us information about the student's name, gender, address,
+				age, grade level, and current score in the class. However, as you saw in the activity, it still comes short;
+				it takes a lot of work to convert some of this information into other usable formats, which may be more suited
+				to certain tasks.</p>
+			<p>In the case of the activity, we could just add another member variable that stores the letter grade, but that adds a bunch more problems.
+				We have to update the letter grade every time we update the score; and if we update the letter grade first, what score do we choose?
+				Also, aren't we storing the data in multiple locations? Isn't that something we want to avoid?</p>
+			<p>The answer to all of this is that we can have <span class="italic">member functions</span> in addition to member variables.
+				Just as with member variables, these functions are associated with a specific instance of the <code>Student</code> struct,
+				and we can use them to do all sorts of useful things. You will be writing the member function implementation of the letter grade
+				determination algorithm in the activity at the end of this section, so let's focus on a similar, but slightly different task:
+				how do we get the colloquial name of their grade level? Let's implement this as a member function:</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	string className () {
+		if (gradeLevel == 9) return "freshman";
+		else if (gradeLevel == 10) return "sophomore";
+		else if (gradeLevel == 11) return "junior";
+		else if (gradeLevel == 12) return "senior";
+		
+		//For grades &lt; 9, just return an empty string
+		return "";
+	}
+};</pre> 
+			<p>First, we notice that the function definition is <span class="italic">inside</span> the definition for <code>Student</code>.
+				This is to be expected, as it is a member of <code>Student</code>, just like the member variables.</p>
+			<p>But the more interesting thing: we can just start using the <code>gradeLevel</code> variable without declaring it or taking it as a parameter!
+				That is because the compiler automatically makes all member variables available to member functions, so we don't need to declare them twice.
+				However, if our member function needed to use more variables, you would still have to declare those variables in the function.
+				Any variables declared as such are <span class="italic">not</span> member variables, as they will disappear after the function returns.</p>
+			<p>Like regular functions, member functions can take parameters to get data from external sources.
+				This is useful if you want to update the state of the <code>struct</code> without breaking some restriction. For example:</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	//...
+	
+	//Create a function to set the score so that student's cannot have scores
+	//less than 0 or greater than 100
+	void setScore (double newScore) {
+		if (newScore >= 0 && newScore &lt;= 100) score = newScore;
+		
+		//otherwise, do nothing
+	}
+};</pre>
+			<p>Once we have member functions written, we can access them just like we would member variables:</p>
+			<pre class="brush: cpp">
+cout &lt;&lt; alice.className() &lt;&lt; endl; //"junior"
+
+alice.setScore(68.9);
+cout &lt;&lt; alice.score &lt;&lt; endl; //68.9
+
+bob.setScore(250);
+cout &lt;&lt; bob.score &lt;&lt; endl; //93.5</pre>
+
+			<h4 id="function-prototyping">Prototyping member functions</h4>
+			<p>Wait, if the function has to be defined inside the <code>struct</code> definition, then doesn't that put a function definition before <code>main</code>?
+				In order for <code>main</code> and any other function to know about <code>Student</code>, it must be defined before each of those functions.
+				Like before, we can use function prototyping to move all of the function implementation after <code>main</code>, so <code>main</code> is the first
+				function implementation that we see. There is the added benefit of prototyping functions in a <code>struct</code> as moving the code elsewhere allows
+				us to quickly glance at what members the <code>struct</code> has.</p>
+			<p>Prototyping member functions is very similar to prototyping regular functions, except there is one big difference in the syntax:</p>
+			<pre class="brush: cpp; highlight: [11, 19]">
+#include &lt;iostream&gt;
+using namespace std;
+
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	string className ();
+};
+
+int main () {
+	//...
+}
+
+//Note the "Student::" before the function name
+string Student::className () {
+	if (gradeLevel == 9) return "freshman";
+	else if (gradeLevel == 10) return "sophomore";
+	else if (gradeLevel == 11) return "junior";
+	else if (gradeLevel == 12) return "senior";
+	
+	return "";
+}</pre>
+			<p>We can see that the prototype itself is the same: just the function signature, followed by a semicolon; but the prototype
+				<span class="italic">must be in the <code>struct</code> defintion</span>. The bigger difference is when we implement the function:
+				our function name has <code>Student::</code> prefixed to it. Because we are no longer in the initial <code>struct</code> definition,
+				we have to tell the compiler that the <code>className</code> is a member of <code>Student</code>.
+				Just like before, we can use the members of <code>Student</code> without declaring them or taking them as parameters; the compiler
+				takes care of that for us.</p>
+			
+			<h4 id="functions-activity">Activity</h4>
+			<p>Rewrite your code for the last activity so the letter grade is returned from a member function.
+				Also, write a member function to set a <code>Student</code>'s <code>gradeLevel</code> such that the <code>gradeLevel</code>
+				is never negative nor greater than 12 (we will assume that a <code>gradeLevel</code> of 0 is for kindergarten).</p>
+			
+			<h3 id="constructors">Constructors</h3>
+          </div>
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>

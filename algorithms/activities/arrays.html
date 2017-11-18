@@ -24,19 +24,6 @@
     <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
     <script type="text/javascript" src="syntax/script/shCore.js"></script>
     <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
-    <style>
-    .spoiler {
-    	background-color: #e0e0e0;
-    	text-align: center;
-    }
-    .spoiler > .contents,
-    .spoiler:hover > .banner {
-    	display: none;
-    }
-    .spoiler:hover > .contents {
-    	display: inline;
-    }
-    </style>
 </head>
 <body class="mdl-base">
 	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
@@ -204,7 +191,8 @@ int nums [20];
 //NOTE! Index 20 is out of bounds, yet i will take on values in [0, 20]
 for (int i = 0; i &lt;= 20; ++i) {
 	nums[i] = i;
-	cout &lt;&lt; i &lt;&lt; endl;</pre>
+	cout &lt;&lt; i &lt;&lt; endl;
+}</pre>
 			<p class="output">0<br/>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>
 				10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/><span class="italic">???</span></p>
 			<p>Firstly, one curious thing: it compiles! The compiler doesn't notice that we're indexing out of the array's bounds
@@ -233,9 +221,13 @@ void someFunction (int *myArray, ...)</pre>
 			<p>Both of the above function signatures are identical. Note that the first form does <span class="bold">NOT</span> have a length argument between the square brackets
 				(or anything, for that matter). As mentioned before, it is infeasible for the compiler to guarantee that an array input to a function will always have a specified length;
 				so all functions that take an array as an argument are required to take arrays of arbitrary length.</p>
-			<p class="italic">Note: the second format shown above takes advantage of the fact that arrays often convert themselves into pointers to their first element. In truth, the first
-				format is interpreted by the compiler as the second format, so these two are truly identical. This is not a technicality that you need to worry about right now --
-				either way you choose, you can still use the array like you would in the function in which you declared it.</p>
+			<p>The other interesting thing to note here is that, unlike a normal variable, when you pass an array to a function, you are actually getting the original array
+				(through a mechanism very similar to pass-by-reference). Because of this, you need to be careful if you decide to modify the array -- you could end up unintentionally changing
+				the original array. If this is a concern, be sure to add <code>const</code> before the declaration to ensure you aren't modifying the array:</p>
+			<pre class="brush: cpp">void someFunction (const int *myArray)</pre>
+			<p class="italic">Note: the second format introduced here takes advantage of the fact that arrays often convert themselves into pointers to their first element.
+				In truth, the first format is interpreted by the compiler as the second format, so these two are truly identical.
+				This is not a technicality that you need to worry about right now -- either way you choose, you can still use the array like you would in the function in which you declared it.</p>
 			<p>However, because we can't specify the length of the array as a part of the parameter itself, how do we know how long the array is? Especially considering that our function
 				must be able to handle an array of any possible length, this functionality is useless to us unless we can use the array properly. To avoid this, you should (almost)
 				<span class="italic">always</span> include another parameter that specifies the length:</p>
@@ -280,7 +272,120 @@ int main () {
 }</pre>
 			<p>Note how the declaration syntax is quite different from that of a native array: our data type is <code>vector&lt;int&gt;</code>, and there is no initial size.
 				You can read this data type as "<code>vector</code> of <code>int</code>". <code>vector</code>s are much like <code>string</code>s in that they run some
-				initialization steps when they are first created. As declared above, the <code>vector</code> would create a list of length <code>0</code>.</p>
+				initialization steps when they are first created. As declared above, the <code>vector</code> would create a list of length <code>0</code>.
+				This might seem useless at first, but we will see in a moment that this is actually helpful for building lists of arbitrary length.</p>
+			<p>You can create a <code>vector</code> with a nonzero initial size, like so:</p>
+			<pre class="brush: cpp">vector&lt;int&gt; myInts (5);</pre>
+			<p>This will create a <code>vector</code> with an initial size of 5. You can use a <code>vector</code> much like you would a regular array; the indexing syntax is the same:</p>
+			<pre class="brush: cpp">
+vector&lt;int&gt; myInts (5);
+
+myInts[0] = 1;
+myInts[1] = 1;
+
+for (int i = 2; i &lt; myInts.size(); ++i) {
+	myInts[i] = myInts[i - 1] + myInts[i - 2];
+}</pre>
+			<p>Notice the <code>myInts.size()</code> in the <code>for</code> loop condition. Because <code>vector</code>s are resizable, they also have a way to determine how many
+				elements they contain at any time; this is what the <code>size()</code> function of <code>vector</code> is for; it will return the current size of the <code>vector</code>.
+				Note that <code>size()</code> is associated with the vector; you will need to write <code>vectorName.size()</code> to get the size of a <code>vector</code> named <code>vectorName</code>.
+				(We will talk more about what this syntax means when we talk about abstract data types).</p>
+			<p>But the problem here is that if we try to index out of bounds, we still end up with undefined behavior! So, we need another way to tell the <code>vector</code> that it needs to resize:</p>
+			<pre class="brush: cpp">
+vector&lt;int&gt; myInts (5);
+
+myInts[0] = 1;
+myInts[1] = 1;
+
+for (int i = 2; i &lt; myInts.size(); ++i) {
+	myInts[i] = myInts[i - 1] + myInts[i - 2];
+}
+
+//Resize the vector so it has 20 elements
+myInts.resize(20);
+
+//myInts now has 20 elements
+for (int i = 5; i &lt; myInts.size(); ++i) {
+	myInts[i] = myInts[i - 1] + myInts[i - 2];
+}</pre>
+			<p>So, we have a function called <code>resize()</code> that allows us to change the size of the <code>vector</code> to.
+				Like the <code>size()</code> function, <code>resize()</code> is associated with the <code>vector</code> that it is operating on,
+				so you will need to prefix the function name and a period to the function call in order for it to work.</p>
+			<p>But this method is still suboptimal -- what if we do not know the ultimate size of the <code>vector</code>? Let's return to the declaration that created an empty <code>vector</code>.
+				There is another function called <code>push_back</code> that increases the size of the <code>vector</code> and adds its argument to the end:</p>
+			<pre class="brush: cpp">
+vector&lt;int&gt; myInts;
+
+//myInts.size() == 0
+
+myInts.push_back(1);
+
+//myInts.size() == 1
+
+myInts.push_back(1);
+
+//myInts.size() == 2
+
+for (int i = 2; i &lt; 20; ++i) {
+	myInts.push_back(myInts[i - 1] + myInts[i - 2]);
+}
+
+//myInts.size() == 20
+
+//You can use range-for with a vector too
+for (int val : myInts) {
+	cout &lt;&lt; val &lt;&lt; end;
+}</pre>
+			<p class="output">1<br/>1<br/>2<br/>3<br/>5<br/>8<br/>13<br/>21<br/>34<br/>55<br/>
+				89<br/>144<br/>233<br/>377<br/>610<br/>987<br/>1597<br/>2584<br/>4181<br/>6765</p>
+			<p>So, now we are building the vector element-by-element: we add one element to it at a time, increasing its size by one each time we call <code>push_back</code>.
+				In the first <code>for</code> loop, <code>i</code> will always be the current size of the <code>vector</code>, so indices <code>i - 1</code> and <code>i - 2</code>
+				will always be valid, so undefined behavior will not occur.</p>
+			<p>The trick here is that if you use <code>push_back</code>, you should <span class="bold">always</span> start out with an empty <code>vector</code>. The reason is that <code>push_back</code>
+				adds its values to the <span class="italic">end</span> of the current <code>vector</code>, so if you start with a <code>vector</code> with a nonzero size, you will start adding elements
+				after the end of the initial ending index, thus having uninitialized values at the beginning of your <code>vector</code>. Be sure that if you are using <code>push_back</code>,
+				you always start with a <code>vector</code> of size 0.</p>
+			
+			<h4 id="vector-functions">Using <code>vector</code>s with functions</h4>
+			<p>Although <code>vector</code>s are conceptually similar to arrays, due to differences in how they are implemented in C++, the syntax you have to use in certain situations is
+				different. The best example of this is passing a <code>vector</code> in a function call. Unlike arrays, to pass a <code>vector</code>,
+				you can use essentially the same syntax as you would when you declare a <code>vector</code>:</p>
+			<pre class="brush: cpp">
+//Function to determine if a vector is sorted
+bool isSorted (vector&lt;int&gt; vec) {
+	for (int i = 0; i &lt; (vec.size() - 1); ++i) {
+		if (!(vec[i] &lt; vec[i + 1])) return false;
+	}
+	
+	return true;
+}</pre>
+			<p>Unlike an array, <code>vectors</code> actually passed by value (copied into new <code>vector</code> variables), so passing them as above can actually be rather slow.
+				Like a <code>string</code>, your code will be much faster if you pass by <code>const</code>-reference:</p>
+			<pre class="brush: cpp">
+//Function to determine if a vector is sorted
+bool isSorted (const vector&lt;int&gt; &amp;vec) {
+	for (int i = 0; i &lt; (vec.size() - 1); ++i) {
+		if (!(vec[i] &lt; vec[i + 1])) return false;
+	}
+	
+	return true;
+}</pre>
+			<p>As before, if you need to modify a <code>vector</code>, then remove the <code>const</code> and simply pass it by reference.</p>
+			<p>The added benefit of using <code>vector</code>s with functions is that the range-<code>for</code> loop will always work, even if the vector was
+				passed into the function:</p>
+			<pre class="brush: cpp">
+int vectorSum (const vector&lt;int&gt; &amp;vec) {
+	int sum = 0;
+	
+	for (int el : vec) sum += el;
+	
+	return sum;
+}</pre>
+			
+			<h4 id="vector-activity">Activity</h4>
+			<p>Given a arbitrary-length list of positive integers terminated by a negative integer, find the mode.
+				If there is more than one mode, just output one of the modes.
+				Do not consider the terminal negative integer in the calculation.</p>  
           </div>
         </div>
        </main>
