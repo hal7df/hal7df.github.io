@@ -274,6 +274,281 @@ string Student::className () {
 				is never negative nor greater than 12 (we will assume that a <code>gradeLevel</code> of 0 is for kindergarten).</p>
 			
 			<h3 id="constructors">Constructors</h3>
+			<p>We have seen the most basic uses of <code>struct</code>s -- we can use them to store related data on a particular item,
+				and we can write functions to perform operations on that data. But so far, we've had to manually initialize all of the
+				data by hand. This can be very tedious, especially if we have several <code>struct</code>s that we need to initialize.
+				Constructors allow us to create default initialization processes that run automatically. As we will see, we can also
+				customize constructors so we can modify the initialization process when necessary.</p>
+			<p>A constructor is, at its core, a function; however it is a little different from all of the other functions we have seen so far.
+				Let's look at an example:</p>
+			<pre class="brush: cpp; highlight: [8]">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student () {
+		//Initialization code goes here
+	}
+};</pre>
+			<p>The two major things to point out here:</p>
+			<ul>
+				<li class="italic">The constructor has no return type, not even <code>void</code>.</li>
+				<li>The constructor has the same exact name as the <code>struct</code>'s type. This is name case-sensitive.</li> 
+			</ul>
+			<p>We can now put our initialization code in the constructor:</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student () {
+		age = 14; //reasonable defaults?
+		gradeLevel = 9;
+		score = 0;
+	}
+};</pre>
+			<p>Now, whenever we declare a variable of type <code>Student</code>,
+				the initialization code in the constructor will run on our newly declared variable,
+				and all of the member variables will be initialized to the value specified in the constructor:</p>
+			<pre class="brush: cpp">
+int main () {
+	Student student; //constructor runs here
+	
+	cout &lt;&lt; student.age &lt;&lt; endl;
+	cout &lt;&lt; student.gradeLevel &lt;&lt; endl;
+	cout &lt;&lt; student.score &lt;&lt; endl;
+	
+	return 0; 
+}</pre>
+			<p class="output">14<br/>9<br/>0</p>
+			<p>As with regular member functions, we can also prototype constructors. The format is the same, just remember that constructor has no return type.</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student ();
+};
+
+int main () {
+	//...
+}
+
+Student::Student () {
+	//initialization code here
+}</pre>
+			<p>But what if we wanted to pass in different initial values?
+				We can accomplish this using a constructor, by passing in parameters:</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student (const string &amp;firstIn, const string &amp;lastIn) {
+		firstName = firstIn;
+		lastName = lastIn;
+		age = 14;
+		gradeLevel = 9;
+		score = 0;
+	}
+};
+
+int main () {
+	//We pass the parameters at declare time, like a function call.
+	Student student ("John", "Doe");
+	
+	cout &lt;&lt; student.firstName &lt;&lt; ' ' &lt;&lt; student.lastName &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="output">John Doe</p>
+			<p>This way, whenever we create a <code>Student</code> object, we can give it an initial name off the bat.
+				We could change the parameters the constructor takes in to include the student's age, grade, and so on.
+				These types of constructors are called <span class="italic">custom constructors</span>, and constructors
+				that take no parameters are called <span class="italic">default constructors</span>.
+				However, there are a few caveats you need to consider:</p>
+			<ul>
+				<li><span class="bold">Constructor parameters should never have the same name as any member variables</span>.
+					While this is technically valid, it causes <a href="scoping-style.html">scoping</a> issues and is very likely to cause headaches.</li>
+				<li>If you write a default constructor, <span class="bold">do not</span> place empty parentheses after variable declarations for that type
+					(i.e. do <span class="underline">not</span> write <code>Student student ();</code>). It is syntactically incorrect C++.</li>
+				<li>If you write a custom constructor, <span class="italic">all</span> declarations of that type <span class="italic">must</span>
+					specify those parameters at declaration time (except as noted below).</li>
+			</ul>
+			<p>Let's look at the last caveat listed above: if you create a custom constructor, all declarations of that <code>struct</code> must pass values for that constructor;
+				in other words, the default constructor is not defined for <code>struct</code>s that have a custom constructor.</p>
+			<p>But then why were we able to declare <code>struct</code> variables without having defined any constructors at all?
+				The reason is because the compiler creates a default constructor for you if you don't define any constructor(s) for a <code>struct</code>.
+				However, as soon as you define a constructor, the compiler no longer creates the default constructor;
+				at that point it is up to you to define a default constructor. As we are about to see, there are ways to give a <code>struct</code> both a custom constructor
+				and a default constructor.</p>
+			<h4 id="default-parameters">Default parameters</h4>
+			<p>The first method is to define <span class="italic">default parameters</span>. Default parameters are default values that are assigned to function parameters
+				if the caller does not pass any value for that parameter. You can define default parameters like so:</p>
+			<pre class="brush: cpp; highlight: [5]">
+struct Student {
+	//...
+	
+	//Make the name blank by default
+	Student (const string &amp;firstIn="", const string &amp;lastIn="") {
+		firstName = firstIn;
+		lastName = lastIn;
+		age = 14;
+		gradeLevel = 9;
+		score = 0;
+	}
+};
+
+int main () {
+	//Now, you can treat the custom constructor like a default constructor
+	Student student1;
+	Student student2 ("John", "Doe");
+	
+	//Outputs a single space
+	cout &lt;&lt; student1.firstName &lt;&lt; ' ' &lt;&lt; student1.lastName &lt;&lt; endl;
+	
+	cout &lt;&lt; student2.firstName &lt;&lt; ' ' &lt;&lt; student2.lastName &lt;&lt; endl;
+	
+	return 0;
+}</pre>
+			<p class="output">&nbsp;<br/>John Doe</p>
+			<p>You can use default parameters with prototypes, as well. Define the default parameters in the prototype, <span class="italic">but not the definition</span>:</p>
+			<pre class="brush: cpp; highlight: [4, 18]">
+struct Student {
+	//...
+	
+	Student (const string &amp;firstIn="", const string &amp;lastIn="");
+};
+
+int main () {
+	//Treat the custom constructor like a default constructor
+	Student student;
+	
+	//Outputs a single space
+	cout &lt;&lt; student.firstName &lt;&lt; ' ' &lt;&lt; student.lastName &lt;&lt; endl;
+	
+	return 0;
+}
+
+//No default parameters here!
+Student::Student (const string &amp;firstIn, const string &amp;lastIn) {
+	firstName = firstIn;
+	lastName = lastIn;
+	age = 14;
+	gradeLevel = 9;
+	score = 0;
+}</pre>
+			<p>However, there is one catch to using default parameters:
+				<span class="bold">all parameters following a parameter with a default value must also have default values</span>.
+				In other words, a constructor like this is <span class="underline">not</span> allowed:</p>
+			<pre class="brush: cpp">Student (const string &amp;firstIn="", const string &amp;lastIn); //WRONG: no default for lastIn!</pre>
+			<h4 id="constructor-overloading">Constructor overloading</h4>
+			<p>Default parameters are the easy method to make a <code>struct</code> have both a default constructor and a custom constructor, however,
+				it is somewhat restrictive in what you can do with it. The other method, which is what is normally used to solve this problem,
+				is to use a C++ feature called <span class="italic">function overloading</span> to define a separate custom and default constructors.
+				The advantage to this method is it allows you to have multiple different custom constructors for the same object.</p>
+			<p>Before we look and see how to overload a constructor, let's step back to functions for a moment. Recall that a function begins with a line that looks like this:</p>
+			<pre class="brush: cpp">returnType functionName (paramType param1, ...);</pre>
+			<p>This is called the function's <span class="italic">signature</span>. Using the information provided in this line, a function can be uniquely identified by the compiler.</p>
+			<p>Now, suppose we have the following function signature:</p>
+			<pre class="brush: cpp">int myFunc (int a);</pre>
+			<p>We can identify it as a function called <code>myFunc</code> that takes a single <code>int</code> as a parameter and returns an <code>int</code>.
+				But what happens if we were to define another function with the following signature in the same file?</p>
+			<pre class="brush: cpp">int myFunc (int a, double b);</pre>
+			<p>It has the same name as our first function, but it has a different number of parameters, so it has a different signature than the first function.
+				Because of this, the compiler has a way to distinguish the following two function calls:</p>
+			<pre class="brush: cpp">
+myFunc(3);
+myFunc(2, 4.5);</pre>
+			<p>The program will call our original function on the first call, and the new function on the second, even though they have the same name!
+				Because the compiler was able to tell that the first function call had only 1 parameter passed to it,
+				and that the second function call had 2 parameters passed to it (the second of which is a <code>double</code>), it was able to correctly
+				identify the right function to call, because we <span class="italic">overloaded</span> the function name <code>myFunc</code>
+				with distinct function signatures. Functions that share the same name but have different signatures are called <span class="italic">overloaded functions</span>,
+				or <span class="italic">overloads</span> for short.</p>
+			<p>Function overloads don't even need to have a different number of arguments, even just one parameter having a different type is enough
+				for the compiler to create a valid overload:</p>
+			<pre class="brush: cpp">
+int myFunc (int a);
+int myFunc (string input);</pre>
+			<p>Based on the type of the variable you pass to the function, the compiler can determine which overload to call.</p>
+			<p>Overloaded functions can even have different return types:</p>
+			<pre class="brush: cpp">
+int myFunc (int a);
+string myFunc (string input);</pre>
+			<p>The only catch regarding return types is that <span class="italic">at least one parameter must be different from all of the other overloads of that name</span>.
+				It is not enough to simply change the return type of the function (even though it is technically a different function signature),
+				because the return value can be ignored, so the compiler would not always have all the information it needs to properly identify the right overload to call.</p>
+			<p>Since a constructor is a function, we can overload it too!</p>
+			<pre class="brush: cpp">
+struct Student {
+	//...
+	
+	//Prototype a default constructor and a custom constructor
+	Student ();
+	Student (const string &amp;firstIn, const string &amp;lastIn);
+};
+
+int main () {
+	//Treat the custom constructor like a default constructor
+	Student student1;
+	Student student2 ("John", "Doe");
+	
+	//Outputs a single space
+	cout &lt;&lt; student.firstName &lt;&lt; ' ' &lt;&lt; student.lastName &lt;&lt; endl;
+	
+	cout &lt;&lt; student.firstName &lt;&lt; ' ' &lt;&lt; student.lastName &lt;&lt; endl;
+	
+	return 0;
+}
+
+//Define the overloaded constructors
+Student::Student () {
+	age = 14;
+	gradeLevel = 9;
+	score = 0;
+	//Use default string values for firstName and lastName
+}
+
+Student::Student (const string &amp;firstIn, const string &amp;lastIn) {
+	firstName = firstIn;
+	lastName = lastIn;
+	age = 14;
+	gradeLevel = 9;
+	score = 0;
+}</pre>
+			<p class="output">&nbsp;<br/>John Doe</p>
+			<p>The big advantage here is that we don't have to stop here.
+				We could define further overloads to create multiple custom constructors:</p>
+			<pre class="brush: cpp">
+struct Student {
+	//...
+	
+	Student ();
+	Student (const string &amp;firstIn, const string &amp;lastIn);
+	Student (const stirng &amp;firstIn, const string &amp;lastIn, int age, int gradeLevel);
+}
+
+//...</pre>
+			<p>While overloading constructors is incredibly useful, keep in mind that
+				<span class="underline">you can only call one constructor for any given <code>struct</code> when you declare the object</span>.
+				You cannot call other constructor overloads from within one constructor.</p>
+				
+			<h4 id="constructors-activity">Activity</h4>
+			<p>Using your code from the last activity, write in a default constructor and at least one custom constructor that allows you to set
+				the name of the student, their age, and their grade level.</p>
           </div>
         </div>
        </main>
