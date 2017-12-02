@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Data hiding and classes &#8212; IA Algorithms Enrichment 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              <a href="../index.html#activities">Activities</a> &gt; Dec 2 &gt; Structs
+            </div>
+            <h2>Abstract data types, part 2: data hiding and <code>class</code>es</h2>
+			<p>So far, we have covered some of the basics of object-oriented programming: storing related data in member variables,
+				performing computations with/on that data using member functions, and how to initialize objects using constructors.
+				Here, we will explore methods to protect the <span class="italic">state</span> of an abstract data type, while
+				still allowing clients (people using your code) to interact with your data type.</p>
+			<ul>
+				<li><a href="#intro">Introduction</a></li>
+				<li><a href="#classes"><code>class</code>es</a></li>
+			</ul>
+			<h3 id="intro">Introduction</h3>
+			<p>Consider our <code>Student</code> <code>struct</code> from before:</p>
+			<pre class="brush: cpp">
+struct Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student ();
+	Student (const string &amp;firstIn, const string &amp;lastIn);
+	
+	string className ();
+	
+	//Implementations omitted for brevity
+};</pre>
+			<p>Suppose we had the following Student, initialized like so:</p>
+			<pre class="brush: cpp">Student alice ("Alice", "Zircon");</pre>
+			<p>After initialization, <code>alice</code> will have an age of 14 be in the 9<sup>th</sup> grade.
+				However, we can still do the following:</p>
+			<pre class="brush: cpp">
+alice.age = -10;
+alice.gradeLevel = 50;</pre>
+			<p>After these two lines, <code>alice</code> will be -10 years old and be in the 50<sup>th</sup> grade!
+				This is violating something called an <span class="italic">invariant</span>, or a property of our abstract data type that must never change.
+				In this case, we are violating two invariants: that <code>age</code> must be positive, and that <code>gradeLevel</code> must be between 0 and 12.</p>
+			<p>Our data type should not allow this to happen. Rather than hoping that no one will break our <code>Student</code> data type,
+				we should program <code>Student</code> so that this can never happen in the first place.</p>
+			<p>This is where <span class="italic">data hiding</span>, and, more specifically, <span class="italic">access levels</span> come into play.
+				The issue here is that external code is allowed to modify the data that belongs to <code>Student</code> without any sort of error checking.
+				Using access levels, we can prevent external code from being able to see this data, and instead provide an <span class="italic">interface</span>
+				through which external code can still interact with the data in <code>Student</code>, but also performs error checking before modifying its state.</p>
+			<p>The two basic access levels are <code>public</code> and <code>private</code>. As their names suggest, all internal and external code can see and
+				interact with member functions and variables with the <code>public</code> access level, whereas only member functions can access data and functions
+				with the <code>private</code> access level.</p>
+			<p>Let's use the following diagram to visualize how we're applying access levels:</p>
+			<img src="img/access-levels0.png" alt="Student with access levels"/>
+			<p>Everything in the <code>private</code> box has the <code>private</code> access level and can only be accessed by member functions,
+				whereas everything in the <code>public</code> box has the <code>public</code> access level and can be accessed by both member functions and external code.</p>
+			<p>You'll notice is that we have placed all of our member variables in <code>private</code>. Generally speaking, we don't want any code other than
+				<code>Student</code> touching its member data, so we have moved it all into <code>private</code>.</p>
+			<p>The next thing is we'll place our constructors in <code>public</code>.
+				Constructors need to be <code>public</code> in order to instantiate an object of our data type.
+				This will allow external code to create new <code>Student</code> objects and set some initial values (such as the student's name).</p>
+			<img src="img/access-levels1.png" alt="Student constructors with public access level"/>
+			<p>Now, we need to develop the interface. We will create a number of member functions with a <code>public</code> access level so external code can access them.
+				These functions will provide a way through which we can read and write to <code>Student</code>'s data; when external code calls the function to write state
+				information to a <code>Student</code>, we will first check if the new state information violates any applicable invariants.
+				If it does, we simply ignore the input. Otherwise, we set the new state. Our <code>Student</code> now looks like this:</p>
+			<img src="img/access-levels2.png" alt="Student with getters/setters"/>
+			<p>As you can see, we have created a <code>get</code> and a <code>set</code> function for each member variable in <code>Student</code>
+				(and combined the functions for <code>firstName</code> and <code>lastName</code>). External code can use the <code>get</code> function to get the value of the member variable,
+				and it can call the <code>set</code> function with the new value to set the value of the member variable.
+				Now, when external code tries to set values in our <code>Student</code> struct, the <code>set</code> functions can check to make sure that
+				<code>Student</code>'s invariants are not violated before writing the input value to the corresponding member variable.</p>
+			<p>Writing <code>get</code> and <code>set</code> functions to allow external code to access the data in your abstract data type is a common practice;
+				these types of functions are called <span class="italic">getters</span> and <span class="italic">setters</span>.</p>
+			<p>This might be a little difficult to understand conceptually at first -- we're preventing external code from accessing the data that belongs to <code>Student</code>,
+				while still allowing it to modify that same data using interface functions (getters and setters). This does <span class="underline">not</span> violate the
+				<code>private</code> access level, as access levels only pertain to <span class="italic">direct accesses</span> (e.g. <code>student.age</code>).
+				Because the interface functions are <code>public</code> and have access to <code>private</code> member variables, they can serve as a bridge to the data in <code>Student</code>.</p>
+			
+			<h3 id="classes"><code>class</code>es</h3>
+			<p>Now that we have discussed the idea behind access control and data hiding, let's look at how to do it in code.</p>
+			<p>The big issue with using a <code>struct</code> is that everything is <code>public</code> by default,
+				so we were able to modify everything that was not explicitly <code>private</code> in our definition.
+				Rather than manually apply the <code>private</code> keyword to all of the members that need to be private,
+				we can change our <code>Student</code> to be a <code>class</code> so that everything is <code>private</code> by default.
+				The idea behind this is that we want to expliclty grant access to members, rather than explicitly deny access.</p>
+			<p>Our Student now looks like this:</p>
+			<pre class="brush: cpp; highlight: [1]">
+class Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+	Student ();
+	Student (const string &amp;firstIn, const string &amp;lastIn);
+	
+	string className ();
+	
+	//Implementations omitted for brevity
+};</pre> 
+			<p>Note that we only changed <code>struct</code> to <code>class</code> -- everything else is exactly the same.
+				<code>class</code>es are almost exactly identical to <code>struct</code>s, the <span class="italic">only</span>
+				difference being that members are <code>private</code> instead of <code>public</code> by default.</p>
+			<p>However, as we mentioned before, our constructors should be <code>public</code>, so external code can instantiate <code>Student</code> objects.
+				We do this by placing the label <code>public:</code> before all members that need to be <code>public</code>:</p>
+			<pre class="brush: cpp; highlight: [8]">
+class Student {
+	string firstName;
+	string lastName;
+	int age;
+	int gradeLevel;
+	double score;
+	
+public:
+	Student ();
+	Student (const string &amp;firstIn, const string &amp;lastIn);
+	
+	string className ();
+	
+	//Implementations omitted for brevity
+};</pre>
+			<p>Above, all members that are declared/prototyped after line 8 will be <code>public</code> instead of <code>private</code>.
+				All of the members declared before that line will be <code>private</code>.</p>
+			<p>Now, we need to implement the getters and setters for <code>Student</code>. Getters are the simplest, so let's start there:</p>
+			<pre class="brush: cpp">
+class Student {
+	//...
+public:
+	//...
+	
+	//return const ref for speed
+	string getName () { return firstName + " " + lastName; }
+	
+	
+	int getAge () { return age; }
+	int getGradeLevel () { return gradeLevel; }
+	double getScore () { return score; }
+};</pre>
+			<p>Getters are quite straightforward: they simply return their corresponding variable.
+				<code>getName</code> is an example of a more complex getter, it uses multiple member variables to produce
+				an output that is indicative of the requested state information.</p>
+			<p>Setters are <code>void</code> functions that (typically) take a single input, the new value for the corresponding member variable.
+				When called, we check that the input value is a valid value for that particular variable, and we only overwrite the value when it is valid.</p>
+			<pre class="brush: cpp">
+class Student {
+	//...
+public:
+	//...
+	
+	void setName (const string &first, const string &last) {
+		//There are no invariants to check here, so just set the variables.
+		firstName = first;
+		lastName = last;
+	}
+	
+	void setAge (int newAge) {
+		if (newAge >= 0) age = newAge;
+	}
+	
+	void setGradeLevel (int newGradeLevel) {
+		if (newGradeLevel >= 0 && newGradeLevel &lt;= 12)
+			gradeLevel = newGradeLevel;
+	}
+	
+	void setScore (double newScore) {
+		if (newScore >= 0 && newScore &lt;= 100) score = newScore; 
+	}
+};</pre>
+			<p>Now, when external code calls <code>student.setAge(-1)</code>, for example,
+				<code>Student</code> will detect a violation of the invariant and return without changing any internal state.</p>
+			
+          </div>
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>
