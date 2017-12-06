@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Further topics &#8212; IA Algorithms Enrichment 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              <a href="../index.html#activities">Activities</a> &gt; Dec 9 &gt; Further topics
+            </div>
+            <h2>Further topics and study</h2>
+			<p>Congratulations on completing the IA Algorithms enrichment!
+				Over the course of this enrichment, you have seen different algorithms that are used in the wild,
+				learned how to design algorithms, and then implement those algorithms in C++.
+				In truth, this type of thinking will carry over to any programming language you might want to learn --
+				all programming languages will have <code>if/else</code> statements, variables, arrays, etc., at this
+				point, it is just a matter of learning new syntax and adjusting yourself to the features of each new
+				language.</p>
+			<p>C++ is a fairly popular and common language and is used to write things ranging from
+				operating systems (Windows, macOS, and Linux all have components written in C++) to
+				<a href="https://en.wikipedia.org/wiki/Google_Chrome" target="_blank">end-user client applications</a>.
+				There are a lot of different extensions to C++ that allow you to use it for a wide variety of different applications.
+				These extensions will require further knowledge of C++ than what we have discussed here, but as you learn more about C++,
+				you will find that a number of neat tricks that C++ is capable of are really just built upon a lot of the basic building
+				blocks that we have already learned. I strongly encourage you to continue learning and writing in C++
+				(in addition to other programming languages), being able to write computer programs is an invaluable skill.</p>
+			<p>I've listed here a number of resources and topics for you to research if you decide that you are interested in
+				continuing to learn about programming and CS topics. These are entirely optional, and will remain located at this
+				web address for the foreseeable future.</p>
+			<p>As a general comment, you will find a <span class="italic">lot</span> of information about programming on the Internet.
+				Google searches will almost always find you relevant topics, documentation, and examples (more often than in other fields, in my experience),
+				and wonderful sites like <a href="https://stackoverflow.com" target="_blank">Stack Overflow</a> host a whole treasure trove of programming
+				knowledge in a friendly Q&amp;A format. If you want to learn something, just search for it!</p>
+			<ul>
+				<li><a href="#cpp-concepts">Finishing up C++ concepts</a></li>
+				<li><a href="#cpp-libraries">C++ libraries</a></li>
+				<li><a href="#other-langs">Other programming languages</a></li>
+				<li><a href="#vcs">Source version control</a></li>
+			</ul>
+			
+			<h3 id="cpp-concepts">Finishing up C++ concepts</h3>
+			<p>We've covered the basics, but there is still much more to learn about how to program in C++.
+				Here's a list of topics I recommend you look into next:</p>
+			<ul>
+				<li><a href="http://www.cplusplus.com/doc/tutorial/inheritance/#inheritance" target="_blank">Class inheritance</a> and 
+					<a href="http://www.cplusplus.com/doc/tutorial/polymorphism/" target="_blank">polymorphism</a> (these are very important topics)</li>
+				<li><a href="http://www.cplusplus.com/doc/tutorial/pointers/" target="_blank">Pointers</a> and <a href="http://www.cplusplus.com/doc/tutorial/dynamic/" target="_blank">dynamic memory</a></li>
+				<li><a href="http://www.cplusplus.com/doc/tutorial/functions2/" target="_blank">More on overloading; function templates</a></li>
+				<li><a href="http://www.cplusplus.com/doc/tutorial/templates/" target="_blank">Operator overloading, <code>static</code>/<code>const</code> members, and class templates</a></li>
+			</ul>
+			<p>In addition to knowing these topics, it's also a good idea to familiarize yourself with the <a href="http://www.cplusplus.com/reference/" target="_blank">C++ standard library</a>.
+				While it is large, it provides a number of useful tools for solving all sorts of programming problems.
+				I would recommend looking at these headers in particular:</p>
+			<ul>
+				<li><a href="http://www.cplusplus.com/reference/cmath/" target="_blank"><code>&lt;cmath&gt;</code></a> (contains math functions)</li>
+				<li><a href="http://www.cplusplus.com/reference/cctype/" target="_blank"><code>&lt;cctype&gt;</code></a> (contains functions for dealing with characters)</li>
+				<li><a href="http://www.cplusplus.com/reference/cstdlib/" target="_blank"><code>&lt;cstdlib&gt;</code></a> (C Standard Library utilities, specifically with <code>int</code>/<code>char[]</code> conversion and random number generation.
+					<code>malloc</code> and the like have been superseded by <code>new</code> and <code>delete</code> in C++)</li>
+				<li><a href="http://www.cplusplus.com/reference/ctime/" target="blank"><code>&lt;ctime&gt;</code></a> or
+					<a href="http://www.cplusplus.com/reference/chrono/" target="_blank"><code>&lt;chrono&gt;</code></a> (dealing with time)</li>
+				<li><a href="http://www.cplusplus.com/reference/map/" target="_blank"><code>&lt;map&gt;</code></a> (creates a "list" where the indices are of an arbitrary data type)</li>
+				<li><a href="http://www.cplusplus.com/reference/iostream/fstream/" target="_blank"><code>&lt;fstream&gt;</code></a> (input/output with files -- not possible on repl.it)</li>
+				<li><a href="http://www.cplusplus.com/reference/algorithm/" target="_blank"><code>&lt;algorithm&gt;</code></a> (provides standard implementations of common algorithms, such as sorting)</li>
+			</ul>
+			
+			<h3 id="cpp-libraries">C++ libraries</h3>
+			<p>C++, being a common and open language, also has a large number of libraries that enable you to do more things with C++ than you can do only with the standard library
+				(at least not without a lot of low-level work). Here is a short list of libraries you might be interested in, and a short description of their purpose:</p>
+			<ul>
+				<li><a href="https://www.qt.io" target="_blank">Qt</a> is a cross-platform graphical application toolkit that allows you to build applications
+					with graphical user interfaces (GUIs). Qt also provides classes for other useful things, such as network communication, database connectivity,
+					webpage rendering, and reading from device sensors.</li>
+				<li><a href="https://curl.haxx.se/libcurl/" target="_blank">cUrl</a> is a C library (that is compatible with C++) that allows you to communicate with Internet hosts;
+					you can use it to download or upload files or information from/to a server, and much more. This is a C library, so some of the patterns it uses might
+					be unfamiliar; I recommend that you look at a number examples and read the documentation prior to writing an application with cUrl. You can also
+					find C++ bindings for cUrl online, but be aware that these may not be as well-documented.</li>
+				<li><a href="http://www.cocos2d-x.org/" target="_blank">cocos2d-x</a> is a video game engine/development library targeted for C++.</li>
+			</ul>
+			<p class="italic">Caution: cUrl and some components of Qt allow you to communicate with public computer systems.
+				Exposing your program to the Internet (or even providing it a way to access the Internet) can provide a way
+				for malicious computer programs to make their way onto your computer.
+				Ensure that your program only communicates with hosts you trust, and that your program only does what you intend for it to do.</p>
+			<p>This is not an exhaustive list of C++ libraries, there are lots out there (some even for the same purpose as others).
+				Most libraries you find should have documentation that details how to use all of the interfaces in the library, as well as some examples to get you started.
+				If not, Google searches will often find examples for you. When working with libraries, you will often find yourself Googling a lot of specific questions.
+				Sites like <a href="https://stackoverflow.com" target="_blank">Stack Overflow</a> have a lot of good questions and answers on how to deal with specific programming
+				problems (library-related or not).</p>
+				
+			<h3 id="other-langs">Other programming languages</h3>
+			<p>C++ is not the only programming language. There are plenty others, and knowing one helps immensely with learning others.
+				If you are interested in learning new programming languages, you can try some of the languages listed below. Note that a number of these feature
+				a syntax very similar to C++:</p>
+			<ul>
+				<li><a href="https://docs.oracle.com/javase/tutorial/" target="_blank">Java</a>: A cross-platform application programming language inspired by C/C++.
+					Heavily object-oriented. Comes with a vast standard library that serves most of the needs of an application developer. This is also the language used to create Android apps.</li>
+				<li><a href="https://docs.python.org/3/tutorial/" target="_blank">Python</a>: A cross-platform, interpreted, object-oriented, dynamically-typed programming language.
+						Useful for making small programs that have a single dedicated purpose, or if you just need to mess around with some code; but it can be used on a larger scale.
+						Known for a more abstract, readable syntax than other programming languages. Also has a large selection of packages that provide a wide range of functions.</li>
+				<li><a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript" target="_blank">JavaScript</a>: An interpreted, object-oriented, dynamically-typed programming language,
+						influenced by Java and C++ (but is <span class="italic">quite</span> distinct from those two). Most often used to provide functionality in webpages.
+						Usually considered to be of a rather low quality (compared to other languages), but is quite useful. I recommend learning
+						<a href="https://developer.mozilla.org/en-US/docs/Learn/HTML" target="_blank">HTML</a> and <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS" target="_blank">CSS</a>,
+						which, while not necessarily programming languages themselves, are usually used with JavaScript to build web applications.</li>
+				<li><a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/GuidedTour.html" target="_blank">Swift</a>:
+						Impicitly and statically typed, object-oriented programming language based on Objective-C. This is largely used for iOS app development but can
+						be used as a general systems programming language as well. Requires macOS or Linux (macOS required for iOS app development).</li>
+				<li><a href="https://doc.rust-lang.org/book/first-edition/" target="_blank">Rust</a>: Implicitly and statically typed, object-oriented systems programming language designed for speed, memory, and thread safety.
+						This has been developed in the last few years to address a lot of pitfalls in other languages (including C++). Components of Mozilla Firefox are written in Rust.</li>
+			</ul>
+			<p>Here's a brief explanation of some of the terms used above:</p>
+			<ul>
+				<li><span class="italic">Interpreted</span>: Instead of compiling your source to computer code, source code is read and executed line by line.
+					Generally slower than compiled languages but do not require recompilation after code changes.</li>
+				<li><span class="italic">Dynamically typed</span>: Types and type conversions are checked at runtime. These languages are usually interpreted and also implicitly typed.</li>
+				<li><span class="italic">Implicitly typed</span>: Variables do not need to be given types when they are declared;
+					their types are inferred from the type of data being assigned to them. Implicitly typed languages usually have a keyword (like <code>let</code> or <code>var</code>)
+					that are used for all variable declarations.</li>
+				<li><span class="italic">Statically typed</span>: Types and type conversions are checked at compile time (like C++). This is the opposite of dynamic typing.</li>
+				<li><span class="italic">Systems programming language</span>: The language can be used to program low-level components of a computer system; these languages can also be used
+					for more user-facing components as well. C++ is a systems programming language.</li>
+			</ul>
+			
+			<h3 id="vcs">Source version control</h3>
+			<p>As your software projects get larger, it becomes more important that you are able to record changes that you make to the codebase and be able to revert changes at any point.
+				Additionally, group software projects need to accomodate a large number of people working on the same codebase at once. <span class="italic">Version control systems</span>
+				enable you to track changes in your software projects and also help accomodate development workflows of group projects.
+				<a href="https://hal7df.github.io/pauls-tutorials/git/index.html" target="_blank">git</a> is the most popular version control system, and is used to track
+				hundreds of thousands, if not millions, of software projects. If you want to get more involved in software development, I highly recommend that you make an account
+				on <a href="https://github.com" target="_blank">GitHub</a>, an online git repository hosting service.</p>
+          </div>
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>
