@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+      https://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Further topics &#8212; IA Algorithms Enrichment 2017</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="../res/material.min.css">
+	<link rel="stylesheet" href="../res/page.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="syntax/css/shCore.css" />
+    <link rel="stylesheet" type="text/css" href="syntax/css/shThemeDefault.css" />
+    <script type="text/javascript" src="syntax/script/shCore.js"></script>
+    <script type="text/javascript" src="syntax/script/shBrushCpp.js"></script>
+</head>
+<body class="mdl-base">
+	<div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">IA Algorithms Enrichment 2017</span>
+        </div>
+      </header>
+      <div class="demo-ribbon"></div>
+      <main class="demo-main mdl-layout__content">
+        <div class="demo-container mdl-grid">
+          <div class="mdl-cell mdl-cell--2-col mdl-cell--hide-tablet mdl-cell--hide-phone"></div>
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--8-col">
+            <div class="demo-crumbs mdl-color-text--grey-500">
+              <a href="../index.html#activities">Activities</a> &gt; Dec 9 &gt; Project ideas
+            </div>
+            <h2>Project ideas</h2>
+			<p>If you're having a hard time deciding what to make for your final project, no worries!
+				Here are some ideas for programming projects that you can use, or you can adapt them into your own project.</p>
+			<ul>
+				<li><a href="#caesar">Making and breaking a Caesar cipher</a></li>
+				<li><a href="#war">War (the card game)</a></li>
+			</ul>
+			<h3 id="caesar">Making and breaking a Caesar cipher</h3>
+			<p class="italic">Relevant topics: arrays, functions, data types, arithmetic</p>
+			<h4>The Caesar cipher</h4>
+			<p>A Caesar cipher is one of the oldest (and also most insecure) methods to encrypt messages, so named because it was used by Caesar and the Romans.
+				A cipher converts a <span class="italic">plaintext</span> message into <span class="italic">ciphertext</span> that is ideally unreadable to anyone
+				who doesn't know some <span class="italic">shared secret</span>, or <span class="italic">key</span>.</p>
+			<p>The Caesar cipher is fairly straight forward. Suppose we have the plaintext <code>ATTACKATDAWN</code> that we want to encrypt.
+				We then choose a letter of the alphabet, and shift all of the letters in the message by that letter's offset from A. For example,
+				if we choose the letter 'C', we shift all of the letters forward by 2. Our encryption looks something like this:</p>
+			<pre>
+Plaintext:  ATTACKATDAWN
+Key:       +CCCCCCCCCCCC
+            ------------
+Ciphertext: CVVCEMCVFCYP</pre>
+           	<p>Every letter was shifted forward by 2, producing the nonsensical ciphertext <code>CVVCEMCVFCYP</code>.
+				In the event where a key would cause the shift to move past Z, we simply wrap around to A and continue from there. For example:</p>
+			<pre>
+Plaintext:  ZZYZXCALIFORNIA
+Key:       +NNNNNNNNNNNNNNN
+            ---------------
+Ciphertext: MMLMKPNYVSBEAVN</pre>
+			<p>To recover the plaintext, we simply do the reverse operation as above: using the key <code>C</code>,
+				we <span class="underline">subtract</span> the key's offset from A from the ciphertext:</p>
+			<pre>
+Ciphertext: CVVCEMCVFCYP
+Key:       -CCCCCCCCCCCC
+            ------------
+Plaintext:  ATTACKATDAWN</pre>
+			<p>As before, if a decryption would cause us to move a letter before A, we wrap around to Z and continue.</p>
+			<pre>
+Ciphertext: MMLMKPNYVSBEAVN
+Key:       -NNNNNNNNNNNNNNN
+            ---------------
+Plaintext:  ZZYZXCALIFORNIA</pre>
+			<h5>Conceptual questions</h5>
+			<ul>
+				<li>What might be an issue with using <code>A</code> as the key?</li>
+				<li>How many possible keys are there? Why might this be a problem?</li>
+				<li>Does the ciphertext reveal anything about the plaintext upon close inspection?
+					Look at what plaintext letters map to in the ciphertext. How might this be exploited?
+					We'll use this weakness in Task 2 to crack the Caesar cipher.</li> 
+			</ul>
+			<h4>Task 1: Encrypt and decrypt text using a Caesar cipher</h4>
+			<p>First, implement a Caesar cipher in C++. Your code should be capable of both encryption and decryption.
+				To simplify things, assume that all plaintext and ciphertext input will contain capital letters (so no lowercase letters, spaces, punctuation, or numerals).</p>
+			
+			<h5>Hint 1: Doing math on <code>char</code>s</h5>
+			<p>As has been mentioned previously, a <code>char</code> is really just another number to a computer.
+				Due to this, we can do math on letters. For example, we can use C++ to compute the numeric value of the key in the example above:</p>
+			<pre class="brush: cpp">
+//the (int) forces cout to output an int instead of a char.
+//This would output a non-printing character without it.
+cout &lt;&lt; (int)('C' - 'A') &lt;&lt; endl;</pre>
+			<p class="output">2</p>
+			<p>We can also add regular <code>int</code>s to <code>char</code>s and get a different letter, based on the offset:</p>
+			<pre class="brush: cpp">cout &lt;&lt; ('A' + 2) &lt;&lt; endl;</pre>
+			<p class="output">C</p>
+			
+			<h5>Hint 2: Using a <code>string</code> like an array</h5>
+			<p>Conceptually, a string is just a sequence of <code>char</code>s, and internally, this is exactly how <code>string</code> stores its data.
+				As such, we can use some of the same concepts we saw with arrays and <code>vector</code>s on <code>string</code>s:</p>
+			<pre class="brush: cpp">
+string foo = "bar";
+
+//Index into a string
+foo[2] = 'z';
+
+//Loop over a string using a range-for loop
+for (char c : foo)
+	cout &lt;&lt; c;
+
+cout &lt;&lt; endl;
+
+//Loop over a string using a range-for loop, allowing changes to carry through
+for (char &amp;c : foo)
+	c += 1; //increment each character by 1
+
+cout &lt;&lt; foo &lt;&lt; endl;</pre>
+			<p class="output">baz<br/>cb{</p>
+			<p>An important thing to note here is that <code>A</code> does <span class="underline">not</span> have a value of 0 (it actually has a value of 65).
+				You will have to account for this when you write your program.</p>
+			
+			<h5>Hint 3: Modular arithmetic</h5>
+			<p>There's another math operator in C++ that we haven't talked about: the <span class="italic">modulo operator</span>, or <code>%</code>.
+				This is a binary operator, much like <code>+</code>, <code>-</code>, <code>*</code>, and <code>/</code>, and it computes
+				<span class="underline">the remainder of the division of the left side by the right side</span>. It is often used to determine if a number is even:</p>
+			<pre class="brush: cpp">
+int myNum = 3;
+
+if (myNum % 2 == 1)
+	cout &lt;&lt; "myNum is odd." &lt;&lt; endl;
+else
+	cout &lt;&lt; "myNum is even." &lt;&lt; endl;</pre>
+			<p class="output">myNum is odd.</p>
+			<p>However, it is also useful to make number sequences wrap around.
+				For example, if we wanted the result of a computation to produce a number between 0 and 4,
+				we can take the result of the computation modulo 5 to achieve this:</p>
+			<pre class="brush: cpp">
+int a, b, c;
+
+a = 4;
+b = 3;
+c = (a + b) % 5;
+
+cout &lt;&lt; c &lt;&lt; endl &lt;&lt; endl;
+
+for (int i = 0; i &lt; 12; ++i)
+	cout &lt;&lt; (i % 5); &lt;&lt; endl;</pre>
+			<p class="output">2<br/><br/>0<br/>1<br/>2<br/>3<br/>4<br/>0<br/>1<br/>2<br/>3<br/>4<br/>0<br/>1<br/>2</p>
+				
+			<h4>Letter frequency analysis</h4>
+			<p>As we saw in the introduction for this problem, this cipher has some flaws with it. It has a very small key space,
+				and any letters that are the same in the plaintext will all map to the same letter in the ciphertext.
+				We can use this fact to determine both the key and the plaintext given only the cipher text.</p>
+			<p>Letters in English are not used equally; it is a well-known fact that the letter 'E' is the most commonly used letter in the English language.
+				Because all the Caesar cipher does is shift the letters in the text, we know that all of the Es will have been mapped to the same letter (say, 'J').
+				As a result, all of the Js in the ciphertext (if E does indeed map to J) should have an appearance frequency roughly equal to that of E in unencrypted English.</p>
+			<p>To perform the analysis, we can tally up each of the characters in the ciphertext and divide each tally by the total number of characters in the message
+				(that way we have the relative frequencies of each letter). Then, we find the letter that is used most often, or has the closest frequency to E.
+				We then compute the difference between the two letters, modulo 26. In this example, we would compute <code>('J' - 'E') % 26 = 'F' = 5</code>.
+				We then try to decrypt the message using this key. If the message is readable, we have found the correct key, if it is not,
+				then we must try this process again, but using the second-most used letter in the ciphertexrt and matching it with the English letter that has the
+				closest frequency.</p>
+			<p>Here is a table of English letter frequencies (<a href="https://www.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html" target="_blank">source</a>):</p>
+			<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="margin: 0 auto;">
+			<thead>
+				<tr>
+					<th class="mdl-data-table__cell--non-numeric">Letter</th>
+					<th>Frequency</th>
+					<th class="mdl-data-table__cell--non-numeric">Letter</th>
+					<th>Frequency</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">A</td>
+					<td>0.0812</td>
+					<td class="mdl-data-table__cell--non-numeric">N</td>
+					<td>0.0695</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">B</td>
+					<td>0.0149</td>
+					<td class="mdl-data-table__cell--non-numeric">O</td>
+					<td>0.0768</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">C</td>
+					<td>0.0271</td>
+					<td class="mdl-data-table__cell--non-numeric">P</td>
+					<td>0.0182</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">D</td>
+					<td>0.0432</td>
+					<td class="mdl-data-table__cell--non-numeric">Q</td>
+					<td>0.0011</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">E</td>
+					<td>0.1202</td>
+					<td class="mdl-data-table__cell--non-numeric">R</td>
+					<td>0.0602</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">F</td>
+					<td>0.0230</td>
+					<td class="mdl-data-table__cell--non-numeric">S</td>
+					<td>0.0628</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">G</td>
+					<td>0.0203</td>
+					<td class="mdl-data-table__cell--non-numeric">T</td>
+					<td>0.0910</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">H</td>
+					<td>0.0592</td>
+					<td class="mdl-data-table__cell--non-numeric">U</td>
+					<td>0.0288</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">I</td>
+					<td>0.0731</td>
+					<td class="mdl-data-table__cell--non-numeric">V</td>
+					<td>0.0111</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">J</td>
+					<td>0.0010</td>
+					<td class="mdl-data-table__cell--non-numeric">W</td>
+					<td>0.0209</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">K</td>
+					<td>0.0069</td>
+					<td class="mdl-data-table__cell--non-numeric">X</td>
+					<td>0.0017</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">L</td>
+					<td>0.0398</td>
+					<td class="mdl-data-table__cell--non-numeric">Y</td>
+					<td>0.0211</td>
+				</tr>
+				<tr>
+					<td class="mdl-data-table__cell--non-numeric">M</td>
+					<td>0.0261</td>
+					<td class="mdl-data-table__cell--non-numeric">Z</td>
+					<td>0.0007</td>
+				</tr>
+			</tbody>
+			</table>
+			
+			<h4>Task 2: Cracking the Caesar cipher</h4>
+			<p class="italic">Disclaimer: It is a federal crime to snoop on or attack an encrypted communications channel without permission.
+				While essentially nothing is encrypted with a Caesar cipher these days (due to it being incredibly easy to crack),
+				you should always exercise caution when performing cryptanalysis on a cipher and be sure that you are acting ethically.</p>
+			<p>Expand your program to perform a letter frequency analysis on a given ciphertext, outputting the key and corresponding decryption.
+				Since your first try may not produce the correct answer, make sure your program tries multiple different possible keys before exiting.
+				You may find having a decryption function (from task 1) helpful for this task.</p>
+			<p>Use your program to find the key and plaintext for the following ciphertext:</p>
+			<p style="font-family: monospace; word-break: break-all;">IFWHZZLZHYLKLCPJLZAOHAHSSVDZVTLWLVWSLAVKHZOMYVTWVPUAHAVWVPUAICLYFMHZADOPSLVAOLYWLVWSLKHZOMYVTWVPUAIAVWVPUAHCLYFMHZAWLVWSLSPCPUNHAWVPUAJILPUNHWVPUAKPYLJASFPUILADLLUHYLVMALUNPCLUAVDVUKLYDOHAZZVNYLHAHIVBAWVPUAHAOHAZVTHUFWLVWSLMYVTWVPUAIHYLZVRLLUAVNLAAOLYLHUKDOHAZZVNYLHAHIVBAWVPUAIAOHAZVTHUFWLVWSLMYVTWVPUAHHYLZVRLLUAVNLAAOLYLAOLFVMALUDPZOAOHAWLVWSLDVBSKQBZAVUJLHUKMVYHSSDVYRVBADOLYLAOLOLJRAOLFDHUALKAVILKVBNSHZHKHTZAOLOPAJOOPRLYZNBPKLAVAOLNHSHEF</p>
+			
+			<h5>Hint: <code>map</code></h5>
+			<p>For this problem, you may find it useful to associate a <code>char</code> with a <code>double</code> (or vice versa);
+				however, arrays and <code>vector</code>s only allow you to associate <code>int</code>s with another data type. Standard template library to the rescue!</p>
+			<p>C++ provides a class called <code>map</code> that allows you to create arbitrary mappings from one data type to another. You use it like this:</p>
+			<pre class="brush: cpp">
+#include &lt;iostream&gt;
+#include &lt;map&gt;
+using namespace std;
+
+int main () {
+	map&lt;char, double&gt; freqs;
+	
+	freqs['C'] = 0.0271;
+	
+	cout &lt;&lt; freqs['C'] &lt;&lt; endl;
+	return 0;
+}</pre>
+			<p class="output">0.0271</p>
+			<p>First, note how the angle brackets have two data types -- <code>char</code> and <code>double</code>. In this context, this means that the map maps <code>char</code>s to <code>double</code>s,
+				so the index type will be a <code>char</code> and the value type will be <code>double</code>.
+				You can use the indexing operator (<code>[]</code>) to index into a <code>map</code> just like you would an array.</p>
+			<p>Note how we didn't have to create an index for <code>C</code> above -- we just immediately indexed into our <code>freqs</code> map and assigned a value.
+				Because map entries are not guaranteed to be adjacent values, <code>map</code> is implemented to immediately add an index if it does not already exist.</p>
+			<p>Here is a <code>map</code> of the English letter frequencies that you can use in your code. Do not worry about the syntax used here;
+				just know that it will return the appropriate frequency if you index into the map with any capital letter.</p>
+			<pre class="brush: cpp">
+map&lt;char, double&gt; engFreqs = {{'A', 0.0812}, {'B', 0.0149}, {'C', 0.0271},
+								{'D', 0.0432}, {'E', 0.1202}, {'F', 0.023},
+								{'G', 0.0203}, {'H', 0.0592}, {'I', 0.0731},
+								{'J', 0.001}, {'K', 0.0069}, {'L', 0.0398},
+								{'M', 0.0261}, {'N', 0.0696}, {'O', 0.0768},
+								{'P', 0.0182}, {'Q', 0.0011}, {'R', 0.0602},
+								{'S', 0.0628}, {'T', 0.0910}, {'U', 0.0288},
+								{'V', 0.0111}, {'W', 0.0209}, {'X', 0.0017},
+								{'Y', 0.0211}, {'Z', 0.0007}};</pre>
+			<p>The full documentation for <code>map</code> can be found <a href="http://www.cplusplus.com/reference/map/map/" target="_blank">here</a>.
+				(Member functions can be found towards the bottom of the page).</p>
+			
+			<h3 id="war">War (the card game)</h3>
+			<p></p>
+          </div>
+        </div>
+       </main>
+      </div>
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+</body>
+</html>
