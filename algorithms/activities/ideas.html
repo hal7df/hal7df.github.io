@@ -48,7 +48,7 @@
 				<li><a href="#war">War (the card game)</a></li>
 			</ul>
 			<h3 id="caesar">Making and breaking a Caesar cipher</h3>
-			<p class="italic">Relevant topics: arrays, functions, data types, arithmetic</p>
+			<p class="italic">Relevant topics: arrays, functions, data types</p>
 			<h4>The Caesar cipher</h4>
 			<p>A Caesar cipher is one of the oldest (and also most insecure) methods to encrypt messages, so named because it was used by Caesar and the Romans.
 				A cipher converts a <span class="italic">plaintext</span> message into <span class="italic">ciphertext</span> that is ideally unreadable to anyone
@@ -316,9 +316,57 @@ map&lt;char, double&gt; engFreqs = {{'A', 0.0812}, {'B', 0.0149}, {'C', 0.0271},
 				<li>Think of another way we could have cracked this cipher. What about this approach might not work so well with modern cipher suites
 					(which typically have key spaces of about 2<sup>2048</sup> to 2<sup>4096</sup>)?
 			</ul>
-			
+			 
 			<h3 id="war">War (the card game)</h3>
-			<p></p>
+			<p class="italic">Relevant topics: Abstract data types, functions</p>
+			<p>War is a simple card game played with two players and a standard poker card deck. At the beginning of the game, the deck is shuffled, and each player receives one half of the cards,
+				which they place in a stack face-down in front of them.</p> 
+			<p>Each player then takes the top card off of their deck and lays it face-up between the two players. The player that has the higher-ranked card wins the round,
+				and places the two cards at the bottom of their deck. This process repeats until one player has all of the cards.</p>
+			<p>Cards ranked are ordered as follows (with the top being the most powerful card, the bottom being the least powerful card):</p>
+			<ul>
+				<li>King</li>
+				<li>Queen</li>
+				<li>Jack</li>
+				<li>10</li>
+				<li>9</li>
+				<li>8</li>
+				<li>7</li>
+				<li>6</li>
+				<li>5</li>
+				<li>4</li>
+				<li>3</li>
+				<li>2</li>
+				<li>A</li>
+			</ul>
+			
+			<h4>Task</h4>
+			<p>Implement a simulator for War in C++. You will want to make <code>class</code>es for the cards and the players.
+				To get started, you will want to initialize the whole deck by placing cards into a <code>vector</code>.
+				The deck has 4 suits (Hearts, Diamonds, Clubs, Spades), each with all of the different ranks listed above.</p>
+			<p>Once you have the full deck set up, shuffle it by doing the following:</p>
+			<pre class="brush: cpp">
+#include &lt;algorithm&gt;
+vector&lt;Card&gt; fullDeck;
+
+//Initialization here
+
+random_shuffle(fullDeck.begin(), fullDeck.end());
+
+//fullDeck is now shuffled.
+</pre>
+			<p>Once you have shuffled the deck, split it into two halves. I have provided two (fully-implemented) Deck classes that will ease the implementation of the game;
+				you can use this for the two players' decks. You can add cards to a <code>Deck</code> like so:</p>
+			<pre class="brush: cpp">
+Deck playerDeck;
+
+playerDeck.push(fullDeck[0]);</pre>
+			<p>Once you have built the players' decks, start playing the game. You can get the top card from a <code>Deck</code> like so:</p>
+			<pre class="brush: cpp">Card &amp;card = playerDeck.pop();</pre>
+			<p>Make sure that you stop the loop between rounds so that the user can see the result of each rounds.
+				You can make the program wait until the user presses Enter by using the following code:</p>
+			<pre class="brush: cpp">cin.ignore();</pre>
+			<p>You can view the starter code <a href="war.cpp" target="_blank">here</a>.</p>
           </div>
         </div>
        </main>
